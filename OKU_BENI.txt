@@ -1,0 +1,26 @@
+MINGO ENGLISH - ANDROID PROJESİ
+
+Bu proje, uygulamayı telefonun kendi Google ses motoruyla (sesli okuma) ve
+mikrofonuyla (Konuş oyunu) çalıştırır.
+
+YOL 1 - Bilgisayarda Android Studio (önerilen)
+ 1. developer.android.com/studio adresinden Android Studio'yu indir, kur.
+ 2. Bu klasörü (MingoEnglish) zip'ten çıkar.
+ 3. Android Studio > Open > MingoEnglish klasörünü seç.
+ 4. İlk açılışta gerekli dosyaları kendisi indirir (birkaç dakika). Bitene kadar bekle.
+ 5. Üst menü: Build > Build App Bundle(s) / APK(s) > Build APK(s)
+ 6. Sağ altta çıkan "locate" linkine tıkla: app-debug.apk dosyası orada.
+ 7. Bu APK'yı WhatsApp / Drive ile telefonlara gönder ve yükle.
+
+YOL 2 - Bilgisayarsız, GitHub üzerinden (tarayıcıdan)
+ 1. github.com'da ücretsiz hesap aç, "New repository" > ad: MingoEnglish > Create.
+ 2. "uploading an existing file" linkine tıkla, bu klasörün İÇİNDEKİ her şeyi sürükle bırak > Commit.
+ 3. Üstte "Actions" sekmesi > "APK Olustur" çalışır (yaklaşık 5 dakika).
+    (.github klasörü yüklenmediyse: Actions > "set up a workflow yourself" > 
+     .github/workflows/build-apk.yml içeriğini yapıştır > Commit.)
+ 4. Biten çalışmaya tıkla > en altta "MingoEnglish-APK" > indir > içinden APK çıkar.
+
+İÇERİĞİ GÜNCELLEMEK
+ Uygulamanın tüm içeriği: app/src/main/assets/www/index.html
+ Bu dosyayı değiştirip tekrar derlemen yeterli.
+ Her yeni sürümde app/build.gradle içindeki versionCode'u 1 artır (2, 3, 4...).

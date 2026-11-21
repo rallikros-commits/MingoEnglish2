@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="theme-color" content="#1778DC">
+<title>Mingo English</title>
+<link rel="icon" href="img/icon_192.png">
+<link rel="apple-touch-icon" href="img/icon_192.png">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:"Trebuchet MS",Verdana,sans-serif;background:linear-gradient(160deg,#ffe8a3,#ffc6d9 50%,#b9e2ff);background-attachment:fixed;min-height:100vh;color:#333;user-select:none;-webkit-user-select:none}
+input{user-select:text;-webkit-user-select:text}
+.top{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:linear-gradient(90deg,#1778DC,#4fb3f5);min-height:68px;color:#fff;position:sticky;top:0;z-index:5;box-shadow:0 3px 8px #0002}
+.top h1:empty{display:none}
+.top h1{font-size:19px;text-align:center;flex:1;padding:0 6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.back{background:#fff3;border:none;color:#fff;font-size:26px;width:44px;height:44px;border-radius:50%;cursor:pointer;flex:none}
+.stars{font-size:16px;font-weight:bold;white-space:nowrap;background:#fff3;padding:6px 10px;border-radius:20px}
+.screen{display:none;padding:14px 14px 40px;max-width:540px;margin:0 auto}
+.screen.on{display:block}
+.title{text-align:center;font-size:20px;margin:6px 0 14px;font-weight:bold;color:#5a3fa0}
+.sec{grid-column:1/-1;font-size:17px;font-weight:bold;color:#5a3fa0;margin:8px 0 -4px 4px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:14px}
+.tile{background:#fff;border-radius:20px;padding:14px 6px;text-align:center;box-shadow:0 5px 0 #0002;cursor:pointer;border:none;font-family:inherit;transition:transform .1s;color:#333;position:relative}
+.tile:active{transform:scale(.95)}
+.tile .e{font-size:42px;display:block}
+.tile .n{font-size:16px;font-weight:bold;margin-top:4px;display:block}
+.tile .t{font-size:12px;color:#888;display:block;margin-top:2px}
+.tile .s{font-size:13px;color:#f5a400;margin-top:4px;display:block;font-weight:bold}
+.tile.wide{grid-column:1/-1;background:#ffd23f}
+.tile.sm .e{font-size:32px}.tile.sm .n{font-size:14px}
+.gr .e{font-size:54px}.gr .n{font-size:21px}
+.bar2{height:8px;background:#eee;border-radius:6px;margin:8px 10px 0;overflow:hidden}
+.bar2 div{height:100%;background:#2ec27e;border-radius:6px}
+.badge{position:absolute;top:6px;right:8px;background:#ff4d4d;color:#fff;font-size:12px;font-weight:bold;border-radius:10px;padding:2px 7px}
+.card{background:#fff;border-radius:28px;padding:22px 14px;text-align:center;box-shadow:0 7px 0 #0002;margin-bottom:14px}
+.big{font-size:104px;line-height:1.1;cursor:pointer;min-height:110px;display:flex;align-items:center;justify-content:center;flex-direction:column}
+.big.txt{font-size:62px;font-weight:bold;color:#ff5d8f}
+.big.spk{font-size:80px}
+.letter{font-size:86px;font-weight:bold;color:#ff5d8f}
+.word{font-size:34px;font-weight:bold;color:#4f8cff;margin-top:8px}
+.sent{font-size:27px;font-weight:bold;color:#4f8cff;line-height:1.3}
+.tr{font-size:19px;color:#777;margin-top:8px}
+.row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.btn{border:none;border-radius:16px;padding:13px 18px;font-size:18px;font-weight:bold;font-family:inherit;cursor:pointer;box-shadow:0 4px 0 #0003;color:#fff;background:#4f8cff}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 #0003}
+.btn.g{background:#2ec27e}.btn.o{background:#ff8c42}.btn.p{background:#a65cff}.btn.r{background:#ff5d8f}.btn.gr{background:#999}
+.btn.sel{outline:4px solid #333}
+.count{text-align:center;margin-top:12px;color:#666;font-size:16px}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.opts.one{grid-template-columns:1fr}
+.opt{background:#fff;border:4px solid transparent;border-radius:20px;padding:12px 8px;font-size:20px;font-weight:bold;font-family:inherit;cursor:pointer;box-shadow:0 5px 0 #0002;min-height:76px;color:#333}
+.opts.one .opt{min-height:58px;font-size:18px}
+.opt.em{font-size:54px;min-height:92px}
+.opt.em.txt{font-size:32px;color:#ff5d8f}
+.opt.ok{border-color:#2ec27e;background:#d7ffe9}
+.opt.no{border-color:#ff4d4d;background:#ffe0e0}
+.prog{height:14px;background:#fff8;border-radius:10px;overflow:hidden;margin-bottom:12px}
+.prog div{height:100%;background:#2ec27e;width:0;transition:width .3s}
+.q{font-size:19px;text-align:center;margin-bottom:8px;font-weight:bold}
+.q small{display:block;font-weight:normal;color:#777;font-size:15px}
+.msg{text-align:center;font-size:22px;min-height:32px;margin-top:12px;font-weight:bold}
+.blank{color:#ff5d8f;border-bottom:3px solid #ff5d8f;padding:0 14px}
+.passage{font-size:16px;text-align:left;line-height:1.5;max-height:190px;overflow:auto;color:#444}
+.pop{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:#0006;z-index:10}
+.pop.on{display:flex}
+.pop .card{max-width:340px;width:90%}
+.fly{position:fixed;font-size:34px;pointer-events:none;animation:fly 1.2s ease-out forwards;z-index:20}
+@keyframes fly{to{transform:translateY(-260px) rotate(200deg);opacity:0}}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+.shake{animation:shake .3s}
+.slot{min-height:66px;background:#fff;border:3px dashed #a65cff;border-radius:18px;padding:10px;display:flex;flex-wrap:wrap;gap:8px;justify-content:center;align-items:center;margin-bottom:14px}
+.slot.ok{border:3px solid #2ec27e;background:#d7ffe9}
+.slot.no{border:3px solid #ff4d4d;background:#ffe0e0}
+.pool{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:16px;min-height:56px}
+.chip{background:#ffd23f;border:none;border-radius:14px;padding:11px 15px;font-size:21px;font-weight:bold;font-family:inherit;box-shadow:0 4px 0 #0002;cursor:pointer;color:#333}
+.slot .chip{background:#b9e2ff}
+.lt{width:46px;height:52px;padding:0;font-size:26px}
+.sl{width:40px;height:50px;border-bottom:4px solid #a65cff;font-size:28px;font-weight:bold;display:flex;align-items:center;justify-content:center;color:#4f8cff}
+.note{background:#fff;border-radius:22px;padding:18px;box-shadow:0 6px 0 #0002;font-size:17px;line-height:1.5}
+.note h3{color:#a65cff;margin:14px 0 6px;font-size:19px}
+.note h3:first-child{margin-top:0}
+.ex{background:#f2f7ff;border-left:5px solid #4f8cff;border-radius:10px;padding:8px 12px;margin:6px 0;cursor:pointer}
+.ex b{color:#4f8cff}
+.ex i{color:#777;font-style:normal;display:block;font-size:15px}
+.chat{display:flex;flex-direction:column;gap:10px;margin-bottom:14px}
+.bub{max-width:84%;background:#fff;border-radius:18px;padding:10px 14px;box-shadow:0 4px 0 #0002;cursor:pointer;transition:transform .2s}
+.bub.l{align-self:flex-start;border-bottom-left-radius:4px}
+.bub.r{align-self:flex-end;background:#e3f0ff;border-bottom-right-radius:4px}
+.bub.now{transform:scale(1.05);outline:3px solid #ffd23f}
+.bub .who{font-size:13px;font-weight:bold;color:#a65cff}
+.bub .en{font-size:19px;font-weight:bold;color:#333}
+.bub .tt{font-size:15px;color:#777;margin-top:3px}
+.hideTr .tt,.hideTr .rtr{display:none}
+.rline{padding:8px 10px;border-radius:12px;cursor:pointer;margin-bottom:4px}
+.rline.now{background:#fff6c8}
+.rline .ren{font-size:19px}
+.rtr{font-size:15px;color:#888}
+.mcol{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.mcol div{display:flex;flex-direction:column;gap:10px}
+.mi{background:#fff;border:4px solid transparent;border-radius:16px;min-height:64px;font-size:19px;font-weight:bold;font-family:inherit;box-shadow:0 4px 0 #0002;cursor:pointer;color:#333}
+.mi.em{font-size:38px}.mi.em.txt{font-size:24px;color:#ff5d8f}
+.mi.sel{border-color:#4f8cff;background:#e3f0ff}
+.mi.done{visibility:hidden}
+.srch{width:100%;padding:14px 16px;font-size:18px;border-radius:16px;border:3px solid #4f8cff;margin-bottom:12px;font-family:inherit}
+.li{display:flex;align-items:center;gap:12px;background:#fff;border-radius:14px;padding:8px 12px;margin-bottom:8px;box-shadow:0 3px 0 #0001;cursor:pointer}
+.li .pe{font-size:34px;width:52px;text-align:center}
+.li .pe.txt{font-size:18px;font-weight:bold;color:#ff5d8f}
+.li b{font-size:18px;color:#4f8cff;display:block}
+.li span{color:#777;font-size:14px}
+.setrow{background:#fff;border-radius:18px;padding:14px;margin-bottom:12px;box-shadow:0 4px 0 #0002}
+.setrow h4{margin-bottom:10px;color:#5a3fa0}
+.wod{background:#fff;border-radius:22px;padding:14px;margin-bottom:14px;box-shadow:0 5px 0 #0002;display:flex;align-items:center;gap:14px;cursor:pointer}
+.wod .pe{font-size:54px}
+.wod .pe.txt{font-size:28px;font-weight:bold;color:#ff5d8f}
+.wod small{color:#a65cff;font-weight:bold}
+.wod b{display:block;font-size:26px;color:#4f8cff}
+.heard{text-align:center;color:#666;font-size:16px;margin-top:8px;min-height:22px}
+.mic{font-size:26px;padding:16px 26px}
+.mic.rec{background:#ff4d4d;animation:pulse 1s infinite}
+@keyframes pulse{50%{transform:scale(1.08)}}
+</style>
+</head>
+<body>
+<div id="splash" style="position:fixed;inset:0;z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 38%,#6ed2ff,#1778DC 75%);transition:opacity .5s">
+  <img src="img/logo.png" alt="Mingo English" style="width:78%;max-width:420px">
+  <div style="color:#fff;font-size:24px;font-weight:bold;margin-top:18px;text-shadow:0 3px 0 #0a326e55">İlkokul İngilizcesi</div>
+</div>
+
+<div class="top">
+  <button class="back" id="back" onclick="goBack()" style="visibility:hidden">‹</button>
+  <h1 id="head"></h1><img id="headLogo" src="img/logo_bar.png" alt="Mingo English" style="height:52px;display:block;margin:0 auto">
+  <span class="stars">⭐ <span id="total">0</span></span>
+</div>
+
+<!-- ANA SAYFA -->
+<div class="screen on" id="home">
+  <div id="ttsWarn" style="display:none;background:#fff3cd;border:2px solid #ffb300;border-radius:16px;padding:10px 14px;margin-bottom:12px;font-size:14px;line-height:1.4">🔇 Bu cihazda İngilizce sesli okuma bulunamadı. Ayarlar → Ses testi kısmına bak.</div>
+  <div class="wod" id="wod"></div>
+  <div class="title">Kaçıncı sınıftasın? 🎒</div>
+  <div class="grid" id="grades"></div>
+  <div class="grid3">
+    <button class="tile sm" onclick="openDict()"><span class="e">📕</span><span class="n">Sözlük</span></button>
+    <button class="tile sm" onclick="openMistakes()"><span class="e">🔁</span><span class="n">Hatalarım</span><span class="badge" id="mBadge" style="display:none"></span></button>
+    <button class="tile sm" onclick="openSettings()"><span class="e">⚙️</span><span class="n">Ayarlar</span></button>
+  </div>
+</div>
+
+<div class="screen" id="themes"><div class="title" id="gTitle"></div><div class="grid" id="themeGrid"></div></div>
+
+<div class="screen" id="menu">
+  <div class="card" style="padding:14px">
+    <div class="big" id="menuIcon" style="min-height:0;font-size:70px"></div>
+    <div class="word" id="menuName" style="font-size:28px"></div>
+    <div class="tr" id="menuTr" style="font-size:16px"></div>
+  </div>
+  <div class="grid" id="menuGrid"></div>
+</div>
+
+<div class="screen" id="cards">
+  <div class="card">
+    <div class="big" id="cShow" onclick="sayCard()"></div>
+    <div class="word" id="cWord"></div>
+    <div class="tr" id="cTr"></div>
+  </div>
+  <div class="row">
+    <button class="btn o" onclick="moveCard(-1)">◀</button>
+    <button class="btn" onclick="sayCard()">🔊 Dinle</button>
+    <button class="btn o" onclick="moveCard(1)">▶</button>
+  </div>
+  <div class="count" id="cCount"></div>
+</div>
+
+<div class="screen" id="noteScr"><div class="note" id="noteBox"></div></div>
+
+<div class="screen" id="dialog">
+  <div class="row" style="margin-bottom:14px">
+    <button class="btn g" onclick="playDialog()">▶ Hepsini Dinle</button>
+    <button class="btn p" onclick="toggleTr('chat')">🇹🇷 Türkçe</button>
+  </div>
+  <div class="chat" id="chat"></div>
+</div>
+
+<div class="screen" id="reading">
+  <div class="card" style="text-align:left">
+    <div class="word" id="rTitle2" style="margin:0 0 10px;font-size:26px;text-align:center"></div>
+    <div id="rText"></div>
+  </div>
+  <div class="row">
+    <button class="btn g" onclick="playReading()">▶ Dinle</button>
+    <button class="btn p" onclick="toggleTr('rText')">🇹🇷 Türkçe</button>
+    <button class="btn r" onclick="startMode('read')">❓ Sorular</button>
+  </div>
+</div>
+
+<div class="screen" id="mcq">
+  <div class="prog"><div id="bar"></div></div>
+  <div class="q" id="qText"></div>
+  <div class="card" style="padding:14px" id="qCard"><div class="big" id="qShow"></div></div>
+  <div class="opts" id="opts"></div>
+  <div class="msg" id="msg"></div>
+</div>
+
+<div class="screen" id="match">
+  <div class="q">Eşleri bul! İngilizceye ve resmine dokun 🔗</div>
+  <div class="mcol"><div id="mL"></div><div id="mR"></div></div>
+  <div class="msg" id="mMsg"></div>
+</div>
+
+<div class="screen" id="spell">
+  <div class="prog"><div id="spBar"></div></div>
+  <div class="card" style="padding:14px">
+    <div class="big" id="spPic" onclick="say(SP.list[SP.i][1])"></div>
+    <div class="tr" id="spTr" style="font-size:22px;font-weight:bold;color:#5a3fa0"></div>
+  </div>
+  <div class="slot" id="spSlots" style="border-style:solid;border-color:#fff"></div>
+  <div class="pool" id="spPool"></div>
+  <div class="row">
+    <button class="btn o" onclick="spUndo()">↩ Geri al</button>
+    <button class="btn" onclick="say(SP.list[SP.i][1])">🔊 İpucu</button>
+  </div>
+  <div class="msg" id="spMsg"></div>
+</div>
+
+<div class="screen" id="build">
+  <div class="prog"><div id="bBar"></div></div>
+  <div class="q">Kelimelere dokunarak cümleyi kur 🧩</div>
+  <div class="card" style="padding:14px"><div class="tr" style="margin:0;font-size:21px;color:#5a3fa0;font-weight:bold" id="bTr"></div></div>
+  <div class="slot" id="slot"></div>
+  <div class="pool" id="pool"></div>
+  <div class="row">
+    <button class="btn o" onclick="undoChip()">↩ Geri al</button>
+    <button class="btn" onclick="say(B.list[B.i][0])">🔊 İpucu</button>
+  </div>
+  <div class="msg" id="bMsg"></div>
+</div>
+
+<div class="screen" id="speak">
+  <div class="prog"><div id="skBar"></div></div>
+  <div class="q">Önce dinle, sonra mikrofona söyle 🎙️</div>
+  <div class="card">
+    <div class="big" id="skPic" style="min-height:0"></div>
+    <div class="sent" id="skText"></div>
+    <div class="tr" id="skTr"></div>
+  </div>
+  <div class="row">
+    <button class="btn" onclick="say(SK.list[SK.i].en)">🔊 Dinle</button>
+    <button class="btn r mic" id="micBtn" onclick="listenMic()">🎙️</button>
+    <button class="btn gr" onclick="skNext(false)">Geç ⏭</button>
+  </div>
+  <div class="heard" id="skHeard"></div>
+  <div class="msg" id="skMsg"></div>
+</div>
+
+<div class="screen" id="dict">
+  <input class="srch" id="dq" placeholder="🔍 Türkçe ya da İngilizce yaz..." oninput="drawDict()">
+  <div id="dList"></div>
+</div>
+
+<div class="screen" id="mistakes">
+  <div class="card"><div class="big" style="min-height:0;font-size:60px">🔁</div><div class="word" id="mkCount"></div><div class="tr">Yanlış yaptığın kelime ve cümleler burada toplanır. Doğru bildikçe listeden silinir.</div></div>
+  <div class="row" style="margin-bottom:14px">
+    <button class="btn g" onclick="startReview()">▶ Hatalarımı Çalış</button>
+    <button class="btn gr" id="mkClear" onclick="clearMistakes()">🗑 Temizle</button>
+  </div>
+  <div id="mkList"></div>
+</div>
+
+<div class="screen" id="settings">
+  <div class="setrow"><h4>🗣️ Okuma hızı</h4><div class="row" id="rateRow"></div></div>
+  <div class="setrow"><h4>🔔 Ses efektleri</h4><div class="row" id="sfxRow"></div></div>
+  <div class="setrow"><h4>🔊 Ses testi</h4><div class="row"><button class="btn" onclick="say('Hello! Welcome to Mingo English!')">▶ Dene</button><button class="btn o" id="ttsBtn" style="display:none" onclick="try{AndroidApp.openTtsSettings()}catch(e){}">⚙️ Ses ayarları</button></div>
+    <div class="tr" id="ttsInfo" style="font-size:14px;color:#c0392b;font-weight:bold"></div>
+    <div class="tr" style="font-size:14px">Ses gelmiyorsa telefonda Ayarlar → Metin okuma çıkışı kısmından Google motorunu ve İngilizce (ABD) sesini indir.</div></div>
+  <div class="setrow"><h4>♻️ İlerleme</h4><div class="row"><button class="btn r" id="resetBtn" onclick="resetAll()">Tüm yıldızları sıfırla</button></div></div>
+</div>
+
+<div class="pop" id="result">
+  <div class="card">
+    <div class="big" id="rEmoji" style="min-height:0">🏆</div>
+    <div class="word" id="rTitle">Harika!</div>
+    <div class="tr" id="rTxt"></div>
+    <div style="font-size:40px;margin:12px 0" id="rStars"></div>
+    <div class="row">
+      <button class="btn g" onclick="closeResult();replay()">🔄 Tekrar</button>
+      <button class="btn p" onclick="closeResult();goBack()">✔ Tamam</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ===================== İÇERİK =====================
+   W: "resim|İngilizce|Türkçe"        (resim emoji ya da kısa yazı)
+   S: "İngilizce cümle|Türkçe"
+   D: "Konuşan|İngilizce|Türkçe"       (diyalog)
+   R: {title, text:["İng|Tr",...], q:["Soru İng|Soru Tr|Doğru|Yanlış|Yanlış",...]}
+   N: konu anlatımı (HTML) — ex("İng","Tr") örnek satırı üretir
+*/
+const ex=(en,tr)=>`<div class="ex" data-say="${en.replace(/"/g,"&quot;")}"><b>🔊 ${en}</b><i>${tr}</i></div>`;
+
+const GRADES=[
+{name:"1. Sınıf",sub:"Başlangıç: ilk kelimeler",icon:"🐣",themes:[
+ {name:"Hayvanlar",en:"Animals",icon:"🐶",W:["🐱|cat|kedi","🐶|dog|köpek","🐦|bird|kuş","🐟|fish|balık","🐴|horse|at","🐮|cow|inek","🦁|lion|aslan","🐘|elephant|fil","🐵|monkey|maymun","🐰|rabbit|tavşan","🦆|duck|ördek","🐑|sheep|koyun","🐷|pig|domuz","🐔|chicken|tavuk","🐸|frog|kurbağa","🐻|bear|ayı","🐯|tiger|kaplan","🐍|snake|yılan"]},
+ {name:"Renkler",en:"Colours",icon:"🎨",W:["🔴|red|kırmızı","🔵|blue|mavi","🟢|green|yeşil","🟡|yellow|sarı","🟠|orange|turuncu","🟣|purple|mor","🩷|pink|pembe","⚫|black|siyah","⚪|white|beyaz","🟤|brown|kahverengi","🩶|grey|gri"]},
+ {name:"Sayılar",en:"Numbers",icon:"🔢",W:["0|zero|sıfır","1|one|bir","2|two|iki","3|three|üç","4|four|dört","5|five|beş","6|six|altı","7|seven|yedi","8|eight|sekiz","9|nine|dokuz","10|ten|on"]},
+ {name:"Meyve ve Sebze",en:"Fruit & Vegetables",icon:"🍎",W:["🍎|apple|elma","🍌|banana|muz","🍊|orange|portakal","🍇|grapes|üzüm","🍓|strawberry|çilek","🍉|watermelon|karpuz","🍐|pear|armut","🍒|cherry|kiraz","🍋|lemon|limon","🍑|peach|şeftali","🍅|tomato|domates","🥕|carrot|havuç","🥔|potato|patates","🌽|corn|mısır","🥒|cucumber|salatalık","🧅|onion|soğan"]},
+ {name:"Vücudum",en:"My Body",icon:"🧒",W:["👁️|eye|göz","👂|ear|kulak","👃|nose|burun","👄|mouth|ağız","✋|hand|el","🦶|foot|ayak","🦵|leg|bacak","💪|arm|kol","🦷|tooth|diş","💇|hair|saç","🙂|face|yüz","☝️|finger|parmak"]},
+ {name:"Oyuncaklar",en:"Toys",icon:"🧸",W:["⚽|ball|top","🪆|doll|oyuncak bebek","🧸|teddy bear|oyuncak ayı","🪁|kite|uçurtma","🚗|car|araba","🤖|robot|robot","🎈|balloon|balon","🧩|puzzle|yapboz","🥁|drum|davul","🚂|train|tren","🪀|yo-yo|yoyo","🧱|blocks|bloklar"]},
+ {name:"Şekiller",en:"Shapes",icon:"🔺",W:["⭕|circle|daire","🟥|square|kare","🔺|triangle|üçgen","⭐|star|yıldız","❤️|heart|kalp","🔷|diamond|elmas","🌙|moon|ay","➕|plus|artı"]},
+ {name:"Giysiler",en:"Clothes",icon:"👕",W:["👕|T-shirt|tişört","👖|trousers|pantolon","👗|dress|elbise","👟|shoes|ayakkabı","🧢|cap|şapka","🧦|socks|çorap","🧥|coat|mont","🧤|gloves|eldiven","🧣|scarf|atkı","👓|glasses|gözlük","👜|bag|çanta"]},
+ {name:"Alfabe",en:"ABC",icon:"🔤",abc:true,W:["🍎|apple|elma|A","⚽|ball|top|B","🐱|cat|kedi|C","🐶|dog|köpek|D","🥚|egg|yumurta|E","🐟|fish|balık|F","🍇|grapes|üzüm|G","🎩|hat|şapka|H","🍦|ice cream|dondurma|I","🧃|juice|meyve suyu|J","🪁|kite|uçurtma|K","🦁|lion|aslan|L","🌙|moon|ay|M","👃|nose|burun|N","🍊|orange|portakal|O","🐷|pig|domuz|P","👸|queen|kraliçe|Q","🐰|rabbit|tavşan|R","☀️|sun|güneş|S","🌳|tree|ağaç|T","☂️|umbrella|şemsiye|U","🎻|violin|keman|V","🍉|watermelon|karpuz|W","🩻|x-ray|röntgen|X","🪀|yo-yo|yoyo|Y","🦓|zebra|zebra|Z"]}
+]},
+
+{name:"2. Sınıf",sub:"Kelimeler ve kısa cümleler",icon:"🐥",themes:[
+ {name:"Okul Hayatı",en:"School Life",icon:"🏫",
+  W:["🖊️|pen|tükenmez kalem","✏️|pencil|kurşun kalem","📕|book|kitap","🎒|bag|çanta","📏|ruler|cetvel","✂️|scissors|makas","🧽|eraser|silgi","📓|notebook|defter","🖍️|crayon|boya kalemi","📄|paper|kağıt","💻|computer|bilgisayar","👩‍🏫|teacher|öğretmen","🧑‍🎓|student|öğrenci","🏫|school|okul","🖌️|brush|fırça"],
+  S:["Hello!|Merhaba!","Hi, I am Ali.|Selam, ben Ali.","What is your name?|Adın ne?","My name is Elif.|Benim adım Elif.","Good morning, teacher!|Günaydın öğretmenim!","Nice to meet you.|Tanıştığıma memnun oldum.","This is my bag.|Bu benim çantam.","Is this a pencil?|Bu bir kurşun kalem mi?","Yes, it is.|Evet, öyle.","No, it is not.|Hayır, değil.","Goodbye, see you!|Hoşça kal, görüşürüz!"],
+  D:["Ali|Hello! I am Ali. What is your name?|Merhaba! Ben Ali. Senin adın ne?","Elif|Hi Ali! My name is Elif.|Selam Ali! Benim adım Elif.","Ali|Nice to meet you.|Tanıştığıma memnun oldum.","Elif|Nice to meet you, too.|Ben de memnun oldum.","Ali|Is this your pencil?|Bu senin kalemin mi?","Elif|Yes, it is. Thank you!|Evet, benim. Teşekkürler!"],
+  R:{title:"Can's School Bag",text:["This is Can.|Bu Can.","He is a student.|O bir öğrenci.","He has got a red bag.|Kırmızı bir çantası var.","In his bag, there is a book, a pen and a ruler.|Çantasında bir kitap, bir kalem ve bir cetvel var.","He loves his school.|Okulunu çok seviyor."],
+     q:["Who is Can?|Can kimdir?|A student|A teacher|A doctor","What colour is his bag?|Çantası ne renk?|Red|Blue|Green","Does he love his school?|Okulunu seviyor mu?|Yes, he does|No, he does not|He has got no school"]},
+  N:`<h3>Selamlaşma</h3>${ex("Hello!","Merhaba!")}${ex("Good morning!","Günaydın!")}${ex("Goodbye!","Hoşça kal!")}<h3>Tanışma</h3>${ex("What is your name?","Adın ne?")}${ex("My name is Zeynep.","Benim adım Zeynep.")}${ex("Nice to meet you.","Tanıştığıma memnun oldum.")}<h3>Bu bir ... / Bu bir ... mi?</h3>"This is a" = Bu bir ... &nbsp; "Is this a ...?" = Bu bir ... mi?${ex("This is a book.","Bu bir kitap.")}${ex("Is this a ruler?","Bu bir cetvel mi?")}${ex("Yes, it is.","Evet, öyle.")}${ex("No, it is not.","Hayır, değil.")}`},
+
+ {name:"Sınıf Hayatı",en:"Classroom Life",icon:"🪑",
+  W:["🚪|door|kapı","🪟|window|pencere","🪑|chair|sandalye","🕐|clock|saat","🗑️|bin|çöp kutusu","💡|light|ışık","👂|listen|dinle","👀|look|bak","🧍|stand up|ayağa kalk","💺|sit down|otur","✍️|write|yaz","📖|read|oku","🙋|raise your hand|parmak kaldır","🤫|be quiet|sessiz ol","📂|open|aç","📁|close|kapat"],
+  S:["Sit down, please.|Lütfen otur.","Stand up.|Ayağa kalk.","Open the door.|Kapıyı aç.","Close the window.|Pencereyi kapat.","Listen to me.|Beni dinle.","Look at the board.|Tahtaya bak.","Raise your hand.|Parmak kaldır.","Be quiet, please.|Lütfen sessiz ol.","Open your book.|Kitabını aç.","Write your name.|Adını yaz.","Turn off the light.|Işığı kapat."],
+  D:["Teacher|Good morning, class!|Günaydın sınıf!","Class|Good morning, teacher!|Günaydın öğretmenim!","Teacher|Sit down, please. Open your books.|Lütfen oturun. Kitaplarınızı açın.","Mert|Sorry, I am late.|Özür dilerim, geç kaldım.","Teacher|Come in and sit down, Mert.|İçeri gel ve otur Mert."],
+  R:{title:"Our Classroom",text:["It is a big classroom.|Büyük bir sınıf.","There is a big board and a clock.|Büyük bir tahta ve bir saat var.","There are twenty chairs.|Yirmi sandalye var.","The teacher says: Open your books, please.|Öğretmen der ki: Lütfen kitaplarınızı açın.","The students open their books and listen.|Öğrenciler kitaplarını açar ve dinler."],
+     q:["Is the classroom big?|Sınıf büyük mü?|Yes, it is|No, it is not|It is a house","What does the teacher say?|Öğretmen ne diyor?|Open your books|Go home|Close the door","What is on the wall?|Duvarda ne var?|A clock|A cat|A bike"]},
+  N:`<h3>Sınıf komutları</h3>Emir cümleleri fiille başlar.${ex("Sit down.","Otur.")}${ex("Stand up.","Ayağa kalk.")}${ex("Open your book.","Kitabını aç.")}${ex("Close the door.","Kapıyı kapat.")}<h3>Kibarlık: please</h3>Başına ya da sonuna "please" eklersen kibar olur.${ex("Sit down, please.","Lütfen otur.")}${ex("Please, be quiet.","Lütfen sessiz ol.")}<h3>Özür dileme</h3>${ex("Sorry, I am late.","Özür dilerim, geç kaldım.")}`},
+
+ {name:"Kişisel Hayat",en:"Personal Life",icon:"😊",
+  W:["😊|happy|mutlu","😢|sad|üzgün","😋|hungry|aç","🥤|thirsty|susamış","😴|tired|yorgun","😠|angry|kızgın","😨|scared|korkmuş","😮|surprised|şaşırmış","🥱|bored|sıkılmış","🤒|ill|hasta","🥶|cold|üşümüş","🥵|hot|sıcaklamış","😀|fine|iyi"],
+  S:["How are you?|Nasılsın?","I am fine, thank you.|İyiyim, teşekkürler.","I am happy today.|Bugün mutluyum.","I am hungry.|Açım.","I am thirsty.|Susadım.","Are you tired?|Yorgun musun?","Yes, I am.|Evet, yorgunum.","No, I am not.|Hayır, değilim.","How old are you?|Kaç yaşındasın?","I am seven years old.|Yedi yaşındayım.","I am scared!|Korkuyorum!"],
+  D:["Zeynep|Hi Can, how are you?|Selam Can, nasılsın?","Can|I am fine, thank you. And you?|İyiyim, teşekkürler. Ya sen?","Zeynep|I am tired and hungry.|Yorgun ve açım.","Can|Here is an apple.|Al, bir elma.","Zeynep|Thank you! Now I am happy.|Teşekkürler! Şimdi mutluyum."],
+  R:{title:"Happy Birthday!",text:["My name is Deniz.|Benim adım Deniz.","I am eight years old.|Sekiz yaşındayım.","Today I am very happy.|Bugün çok mutluyum.","It is my birthday!|Bugün benim doğum günüm!","My mother has got a big cake.|Annemin büyük bir pastası var."],
+     q:["How old is Deniz?|Deniz kaç yaşında?|Eight|Ten|Six","How is Deniz today?|Deniz bugün nasıl?|Very happy|Sad|Angry","Why is Deniz happy?|Deniz neden mutlu?|It is his birthday|He is ill|He is at school"]},
+  N:`<h3>Nasılsın?</h3>${ex("How are you?","Nasılsın?")}${ex("I am fine, thank you.","İyiyim, teşekkürler.")}<h3>Duygular: I am ...</h3>"I am" + duygu = "...-ım"${ex("I am happy.","Mutluyum.")}${ex("I am hungry.","Açım.")}<h3>Soru: Are you ...?</h3>${ex("Are you sad?","Üzgün müsün?")}${ex("Yes, I am.","Evet.")}${ex("No, I am not.","Hayır.")}<h3>Yaş sorma</h3>${ex("How old are you?","Kaç yaşındasın?")}${ex("I am eight years old.","Sekiz yaşındayım.")}`},
+
+ {name:"Aile Hayatı",en:"Family Life",icon:"👨‍👩‍👧",
+  W:["👩|mother|anne","👨|father|baba","👧|sister|kız kardeş","👦|brother|erkek kardeş","👶|baby|bebek","👵|grandmother|büyükanne","👴|grandfather|büyükbaba","👨‍👩‍👧‍👦|family|aile","💑|parents|anne baba","👯|twins|ikizler","🐕|pet|evcil hayvan","🙋|me|ben"],
+  S:["This is my mother.|Bu benim annem.","This is my father.|Bu benim babam.","She is my sister.|O benim kız kardeşim.","He is my brother.|O benim erkek kardeşim.","I love my family.|Ailemi seviyorum.","Who is she?|O kim?","She is my grandmother.|O benim büyükannem.","I have got a baby brother.|Bebek bir erkek kardeşim var.","My family is big.|Ailem kalabalık.","We have got a pet dog.|Evcil bir köpeğimiz var."],
+  D:["Ece|Look! This is my family photo.|Bak! Bu benim aile fotoğrafım.","Ali|Who is he?|O kim?","Ece|He is my father.|O benim babam.","Ali|And who is she?|Peki o kim?","Ece|She is my grandmother. I love her!|O benim büyükannem. Onu çok seviyorum!"],
+  R:{title:"My Family",text:["This is my family.|Bu benim ailem.","My father is Murat and my mother is Selin.|Babam Murat, annem Selin.","I have got a sister.|Bir kız kardeşim var.","Her name is Ada. She is a baby.|Onun adı Ada. O bir bebek.","We have got a cat, too. Its name is Pamuk.|Bir de kedimiz var. Adı Pamuk."],
+     q:["Who is Selin?|Selin kim?|The mother|The sister|The cat","Who is Ada?|Ada kim?|A baby|A teacher|A cat","What is the cat's name?|Kedinin adı ne?|Pamuk|Murat|Selin"]},
+  N:`<h3>Ailemi tanıtıyorum</h3>"This is my" = Bu benim ...${ex("This is my mother.","Bu benim annem.")}${ex("This is my brother.","Bu benim erkek kardeşim.")}<h3>He / She</h3><b>He</b> = O (erkek) &nbsp; <b>She</b> = O (kadın, kız)${ex("He is my father.","O benim babam.")}${ex("She is my sister.","O benim kız kardeşim.")}<h3>Kim?</h3>${ex("Who is he?","O kim?")}${ex("He is my grandfather.","O benim büyükbabam.")}`},
+
+ {name:"Evim",en:"Homes",icon:"🏠",
+  W:["🏠|house|ev","🛏️|bed|yatak","🛋️|sofa|kanepe","📺|TV|televizyon","💡|lamp|lamba","🛁|bath|küvet","🚪|door|kapı","🧸|toy|oyuncak","🪟|window|pencere","🪑|chair|sandalye","🖼️|picture|resim","🕰️|clock|saat","🪴|plant|bitki","📦|box|kutu","🔑|key|anahtar"],
+  S:["This is my house.|Bu benim evim.","My house is big.|Evim büyük.","My room is small.|Odam küçük.","What is it?|Bu ne?","It is a lamp.|Bu bir lamba.","Where is my toy?|Oyuncağım nerede?","It is on the bed.|Yatağın üstünde.","I like my room.|Odamı seviyorum.","The sofa is blue.|Kanepe mavi.","The door is open.|Kapı açık."],
+  D:["Mom|Can, where is your teddy bear?|Can, oyuncak ayın nerede?","Can|I do not know, mom.|Bilmiyorum anne.","Mom|Look! It is on the sofa.|Bak! Kanepenin üstünde.","Can|Oh, thank you!|Aa, teşekkürler!","Mom|Now go to bed. Good night!|Şimdi yatağa. İyi geceler!","Can|Good night, mom!|İyi geceler anne!"],
+  R:{title:"My Room",text:["This is my room.|Bu benim odam.","It is small but nice.|Küçük ama güzel.","There is a bed, a lamp and a box of toys.|Bir yatak, bir lamba ve bir oyuncak kutusu var.","My bed is blue.|Yatağım mavi.","I love my room!|Odamı çok seviyorum!"],
+     q:["Is the room big?|Oda büyük mü?|No, it is small|Yes, it is big|It is a garden","What colour is the bed?|Yatak ne renk?|Blue|Red|Yellow","What is in the box?|Kutuda ne var?|Toys|Books|Apples"]},
+  N:`<h3>Bu ne?</h3>${ex("What is it?","Bu ne?")}${ex("It is a lamp.","Bu bir lamba.")}<h3>Büyük - küçük</h3><b>big</b> = büyük &nbsp; <b>small</b> = küçük${ex("My house is big.","Evim büyük.")}${ex("My room is small.","Odam küçük.")}<h3>Nerede?</h3>${ex("Where is my ball?","Topum nerede?")}${ex("It is on the bed.","Yatağın üstünde.")}`},
+
+ {name:"Şehir ve Dünya",en:"City & World",icon:"🌍",
+  W:["🚗|car|araba","🚌|bus|otobüs","🚕|taxi|taksi","🚂|train|tren","🚢|ship|gemi","✈️|plane|uçak","🚲|bike|bisiklet","🚦|traffic light|trafik ışığı","🌉|bridge|köprü","🏞️|park|park","🌳|tree|ağaç","🌸|flower|çiçek","🏥|hospital|hastane","🏪|shop|dükkan","☀️|sun|güneş"],
+  S:["Look at the bus!|Otobüse bak!","I see a car.|Bir araba görüyorum.","It is a big ship.|Bu büyük bir gemi.","It is sunny.|Hava güneşli.","I like my city.|Şehrimi seviyorum.","The bus is yellow.|Otobüs sarı.","I go to the park.|Parka giderim.","Red means stop.|Kırmızı dur demek.","Green means go.|Yeşil geç demek.","Wow, a plane!|Vay, bir uçak!"],
+  D:["Ali|Look, dad! A big ship!|Bak baba! Büyük bir gemi!","Dad|Yes, it is under the bridge.|Evet, köprünün altında.","Ali|Can we go to the park?|Parka gidebilir miyiz?","Dad|Yes, let us go by bus.|Evet, otobüsle gidelim.","Ali|Yay! I like the bus.|Yaşasın! Otobüsü severim."],
+  R:{title:"My City",text:["My city is İstanbul.|Şehrim İstanbul.","It is very big.|Çok büyük.","There are many cars, buses and ships.|Birçok araba, otobüs ve gemi var.","There is a big bridge.|Büyük bir köprü var.","I like the parks in my city.|Şehrimdeki parkları severim."],
+     q:["What is the city?|Şehir hangisi?|İstanbul|Ankara|İzmir","Is the city small?|Şehir küçük mü?|No, it is big|Yes, it is small|It is a village","What does the writer like?|Yazar neyi seviyor?|The parks|The rain|The school"]},
+  N:`<h3>Bak!</h3>"Look at" = ...-e bak${ex("Look at the plane!","Uçağa bak!")}<h3>Görüyorum</h3>"I see a" = Bir ... görüyorum${ex("I see a tree.","Bir ağaç görüyorum.")}${ex("I see a bike.","Bir bisiklet görüyorum.")}<h3>Trafik ışığı</h3>${ex("Red means stop.","Kırmızı dur demek.")}${ex("Green means go.","Yeşil geç demek.")}`}
+]},
+
+{name:"3. Sınıf",sub:"Cümle kurmaya başla",icon:"🐤",themes:[
+ {name:"Okul Hayatı",en:"School Life",icon:"📚",
+  W:["➗|Maths|matematik","🔬|Science|fen bilimleri","🎨|Art|görsel sanatlar","🎵|Music|müzik","🇬🇧|English|İngilizce","🇹🇷|Turkish|Türkçe","⚽|PE|beden eğitimi","📖|lesson|ders","🔔|break|teneffüs","📝|homework|ödev","📃|test|sınav","🛝|playground|oyun alanı","📚|library|kütüphane","🥪|canteen|kantin","🗓️|timetable|ders programı"],
+  S:["What is your name?|Adın ne?","My name is Elif.|Benim adım Elif.","I like Maths.|Matematiği severim.","I do not like Music.|Müziği sevmem.","My favourite lesson is Art.|En sevdiğim ders resim.","Do you like Science?|Fen bilimlerini sever misin?","Yes, I do.|Evet, severim.","No, I do not.|Hayır, sevmem.","We play in the playground.|Oyun alanında oynarız.","I have got homework today.|Bugün ödevim var.","I am in the third grade.|Üçüncü sınıftayım."],
+  D:["Mert|Hi, I am Mert. What is your name?|Selam, ben Mert. Senin adın ne?","Defne|My name is Defne.|Benim adım Defne.","Mert|Do you like Maths?|Matematiği sever misin?","Defne|Yes, I do. It is my favourite lesson. And you?|Evet, severim. En sevdiğim ders. Ya sen?","Mert|I do not like Maths. I like Art and Music.|Matematiği sevmem. Resim ve müziği severim.","Defne|Cool! Let us go to the library.|Harika! Hadi kütüphaneye gidelim."],
+  R:{title:"Kaan's School",text:["Hello! I am Kaan.|Merhaba! Ben Kaan.","I am nine years old.|Dokuz yaşındayım.","I am in the third grade.|Üçüncü sınıftayım.","I like English and PE.|İngilizce ve beden eğitimini severim.","I do not like Maths. It is difficult.|Matematiği sevmem. Zor.","My favourite place is the library.|En sevdiğim yer kütüphane."],
+     q:["How old is Kaan?|Kaan kaç yaşında?|Nine|Seven|Eleven","Which lesson does he not like?|Hangi dersi sevmiyor?|Maths|English|PE","What is his favourite place?|En sevdiği yer neresi?|The library|The canteen|The park"]},
+  N:`<h3>Sevdiğim - sevmediğim</h3><b>I like</b> = severim &nbsp; <b>I do not like (don't like)</b> = sevmem${ex("I like English.","İngilizceyi severim.")}${ex("I do not like Maths.","Matematiği sevmem.")}<h3>Soru: Do you like ...?</h3>${ex("Do you like Music?","Müziği sever misin?")}${ex("Yes, I do.","Evet, severim.")}${ex("No, I do not.","Hayır, sevmem.")}<h3>En sevdiğim</h3>"favourite" = en sevdiğim${ex("My favourite lesson is Art.","En sevdiğim ders resim.")}`},
+
+ {name:"Sınıf Hayatı",en:"Classroom Life",icon:"📦",
+  W:["11|eleven|on bir","12|twelve|on iki","13|thirteen|on üç","14|fourteen|on dört","15|fifteen|on beş","16|sixteen|on altı","17|seventeen|on yedi","18|eighteen|on sekiz","19|nineteen|on dokuz","20|twenty|yirmi","30|thirty|otuz","40|forty|kırk","50|fifty|elli","100|one hundred|yüz"],
+  S:["The book is on the desk.|Kitap sıranın üstünde.","The pen is in the bag.|Kalem çantanın içinde.","The cat is under the chair.|Kedi sandalyenin altında.","Where is my pencil?|Kurşun kalemim nerede?","It is under the table.|Masanın altında.","How many pencils?|Kaç tane kalem?","There are twelve pencils.|On iki kalem var.","How many students are there?|Kaç öğrenci var?","There are twenty students.|Yirmi öğrenci var.","Count from one to twenty.|Birden yirmiye kadar say."],
+  D:["Selin|Where is my eraser?|Silgim nerede?","Ali|Is it in your bag?|Çantanda mı?","Selin|No, it is not.|Hayır, değil.","Ali|Look! It is under your desk.|Bak! Sıranın altında.","Selin|Oh yes! Thank you.|Aa evet! Teşekkürler.","Ali|You are welcome.|Rica ederim."],
+  R:{title:"In My Classroom",text:["In my classroom, there are eighteen students.|Sınıfımda on sekiz öğrenci var.","There are twenty desks.|Yirmi sıra var.","My bag is under my desk.|Çantam sıramın altında.","My books are on the desk.|Kitaplarım sıranın üstünde.","My pencils are in my pencil case.|Kalemlerim kalem kutumun içinde."],
+     q:["How many students are there?|Kaç öğrenci var?|Eighteen|Twenty|Twelve","Where is the bag?|Çanta nerede?|Under the desk|On the desk|In the box","Where are the pencils?|Kalemler nerede?|In the pencil case|Under the chair|On the board"]},
+  N:`<h3>Nerede? in - on - under</h3><b>in</b> = içinde &nbsp; <b>on</b> = üstünde &nbsp; <b>under</b> = altında${ex("The pen is in the bag.","Kalem çantanın içinde.")}${ex("The book is on the desk.","Kitap sıranın üstünde.")}${ex("The ball is under the chair.","Top sandalyenin altında.")}<h3>Kaç tane? How many</h3>${ex("How many books?","Kaç tane kitap?")}${ex("There are fifteen books.","On beş kitap var.")}<h3>Sayılar 11-20</h3>13'ten 19'a kadar sayılar <b>-teen</b> ile biter.${ex("thirteen, fourteen, fifteen","on üç, on dört, on beş")}`},
+
+ {name:"Kişisel Hayat",en:"Personal Life",icon:"🏊",
+  W:["🏊|swim|yüzmek","💃|dance|dans etmek","🎤|sing|şarkı söylemek","📖|read|okumak","✏️|draw|resim çizmek","⚽|play football|futbol oynamak","🚲|ride a bike|bisiklete binmek","🦘|jump|zıplamak","⛸️|skate|paten kaymak","🧗|climb|tırmanmak","🧑‍🍳|cook|yemek yapmak","🎸|play the guitar|gitar çalmak","♟️|play chess|satranç oynamak","🏃|run|koşmak","🪁|fly a kite|uçurtma uçurmak","⛷️|ski|kayak yapmak"],
+  S:["I can swim.|Yüzebilirim.","I can not dance.|Dans edemem.","Can you sing?|Şarkı söyleyebilir misin?","Yes, I can.|Evet, yapabilirim.","No, I can not.|Hayır, yapamam.","She can ride a bike.|O bisiklete binebilir.","He can play the guitar.|O gitar çalabilir.","I can run fast.|Hızlı koşabilirim.","Can you play chess?|Satranç oynayabilir misin?","My brother can not swim.|Erkek kardeşim yüzemez."],
+  D:["Ada|Can you swim, Efe?|Yüzebilir misin Efe?","Efe|Yes, I can. I can swim very well.|Evet. Çok iyi yüzerim.","Ada|Can you play the guitar?|Gitar çalabilir misin?","Efe|No, I can not. But I can sing!|Hayır, çalamam. Ama şarkı söyleyebilirim!","Ada|Great! I can play the guitar. Let us make music!|Harika! Ben gitar çalabilirim. Hadi müzik yapalım!"],
+  R:{title:"Meet Robo",text:["Meet Robo. Robo is a robot.|Robo ile tanışın. Robo bir robot.","Robo can talk and Robo can dance.|Robo konuşabilir ve dans edebilir.","Robo can play chess, too.|Robo satranç da oynayabilir.","But Robo can not swim.|Ama Robo yüzemez.","Water is bad for robots!|Su robotlar için kötüdür!"],
+     q:["What is Robo?|Robo nedir?|A robot|A cat|A boy","Can Robo dance?|Robo dans edebilir mi?|Yes, it can|No, it can not|It is a dog","Can Robo swim?|Robo yüzebilir mi?|No, it can not|Yes, it can|It likes water"]},
+  N:`<h3>can = -ebilirim</h3>Yapabildiğimiz şeyleri anlatır.${ex("I can swim.","Yüzebilirim.")}${ex("She can draw.","O resim çizebilir.")}<h3>can not (can't) = -emem</h3>${ex("I can not ski.","Kayak yapamam.")}${ex("He can not cook.","O yemek yapamaz.")}<h3>Soru: Can + kişi + fiil?</h3>${ex("Can you dance?","Dans edebilir misin?")}${ex("Yes, I can.","Evet, edebilirim.")}${ex("No, I can not.","Hayır, edemem.")}`},
+
+ {name:"Aile Hayatı",en:"Family Life",icon:"👪",
+  W:["👨‍🦱|uncle|amca / dayı","👩‍🦰|aunt|hala / teyze","🧒|cousin|kuzen","📏|tall|uzun boylu","🤏|short|kısa boylu","👴|old|yaşlı","👶|young|genç","💪|strong|güçlü","😄|funny|komik","🤗|kind|nazik","👓|glasses|gözlük","🧔|beard|sakal","👱|blonde hair|sarı saç","💁|friend|arkadaş"],
+  S:["She is my sister.|O benim kız kardeşim.","He is my uncle.|O benim amcam.","I have got a brother.|Bir erkek kardeşim var.","I have got two cousins.|İki kuzenim var.","My father is tall.|Babam uzun boylu.","My aunt is young.|Teyzem genç.","My grandfather has got glasses.|Dedemin gözlüğü var.","My uncle is very funny.|Amcam çok komik.","Have you got a sister?|Kız kardeşin var mı?","Yes, I have.|Evet, var.","No, I have not.|Hayır, yok."],
+  D:["Emre|Have you got a brother?|Erkek kardeşin var mı?","Zeynep|Yes, I have. His name is Ali.|Evet, var. Adı Ali.","Emre|Is he tall?|Uzun boylu mu?","Zeynep|Yes, he is tall and strong.|Evet, uzun boylu ve güçlü.","Emre|I have got two cousins. They are very funny!|Benim iki kuzenim var. Çok komikler!"],
+  R:{title:"Uncle Tarık",text:["This is my uncle, Tarık.|Bu benim amcam Tarık.","He is tall and he has got a beard.|Uzun boylu ve sakalı var.","He is very kind and funny.|Çok nazik ve komik.","He has got two children.|İki çocuğu var.","They are my cousins, Ela and Bora.|Onlar benim kuzenlerim Ela ve Bora."],
+     q:["Is uncle Tarık tall?|Tarık amca uzun boylu mu?|Yes, he is|No, he is short|He is a baby","Has he got a beard?|Sakalı var mı?|Yes, he has|No, he has not|He has got glasses","Who are Ela and Bora?|Ela ve Bora kim?|His children|His friends|His teachers"]},
+  N:`<h3>have got / has got = ...-ı var</h3>I, you, we, they ile <b>have got</b>; he, she ile <b>has got</b>.${ex("I have got a sister.","Bir kız kardeşim var.")}${ex("She has got blonde hair.","Onun sarı saçı var.")}<h3>Soru</h3>${ex("Have you got a cousin?","Kuzenin var mı?")}${ex("Yes, I have.","Evet, var.")}${ex("No, I have not.","Hayır, yok.")}<h3>İnsanları tarif etme</h3>${ex("My uncle is tall and funny.","Amcam uzun boylu ve komik.")}`},
+
+ {name:"Evim",en:"Homes",icon:"🛋️",
+  W:["🍳|kitchen|mutfak","🛁|bathroom|banyo","🛏️|bedroom|yatak odası","🛋️|living room|oturma odası","🌷|garden|bahçe","🪑|chair|sandalye","🍽️|table|masa","🧊|fridge|buzdolabı","🪞|mirror|ayna","🪜|stairs|merdiven","🚿|shower|duş","🚽|toilet|tuvalet","🪟|window|pencere"],
+  S:["There is a bed in my bedroom.|Yatak odamda bir yatak var.","There are two chairs.|İki sandalye var.","Where is mum?|Annem nerede?","She is in the kitchen.|O mutfakta.","Where is dad?|Babam nerede?","He is in the garden.|O bahçede.","There is a mirror in the bathroom.|Banyoda bir ayna var.","Is there a TV in your room?|Odanda televizyon var mı?","Yes, there is.|Evet, var.","No, there is not.|Hayır, yok.","There are four rooms in my house.|Evimde dört oda var."],
+  D:["Grandma|Where is Ali?|Ali nerede?","Mom|He is in his bedroom.|Yatak odasında.","Grandma|And where is Ece?|Peki Ece nerede?","Mom|She is in the garden with the cat.|Kediyle bahçede.","Grandma|Is there any tea in the kitchen?|Mutfakta çay var mı?","Mom|Yes, there is!|Evet, var!"],
+  R:{title:"Our House",text:["My house has got five rooms.|Evimin beş odası var.","There is a kitchen, a living room, a bathroom and two bedrooms.|Bir mutfak, bir oturma odası, bir banyo ve iki yatak odası var.","There is a big garden, too.|Büyük bir bahçe de var.","There are many flowers in the garden.|Bahçede birçok çiçek var.","My cat sleeps in the living room.|Kedim oturma odasında uyur."],
+     q:["How many rooms are there?|Kaç oda var?|Five|Three|Two","How many bedrooms are there?|Kaç yatak odası var?|Two|One|Four","Where does the cat sleep?|Kedi nerede uyur?|In the living room|In the garden|In the kitchen"]},
+  N:`<h3>There is / There are = var</h3>Tek şey: <b>There is</b> &nbsp; Birden çok: <b>There are</b>${ex("There is a sofa.","Bir kanepe var.")}${ex("There are three chairs.","Üç sandalye var.")}<h3>Soru ve cevap</h3>${ex("Is there a garden?","Bahçe var mı?")}${ex("Yes, there is.","Evet, var.")}${ex("No, there is not.","Hayır, yok.")}<h3>Nerede?</h3>${ex("Where is dad?","Babam nerede?")}${ex("He is in the garden.","O bahçede.")}`},
+
+ {name:"Hava ve Mevsimler",en:"City & World",icon:"🌦️",
+  W:["☀️|sunny|güneşli","🌧️|rainy|yağmurlu","❄️|snowy|karlı","💨|windy|rüzgarlı","☁️|cloudy|bulutlu","⛈️|stormy|fırtınalı","🥵|hot|sıcak","🥶|cold|soğuk","🧥|coat|mont","☂️|umbrella|şemsiye","👢|boots|bot","🕶️|sunglasses|güneş gözlüğü","🌈|rainbow|gökkuşağı","🌸|spring|ilkbahar","🏖️|summer|yaz","🍂|autumn|sonbahar","☃️|winter|kış"],
+  S:["How is the weather?|Hava nasıl?","It is rainy today.|Bugün hava yağmurlu.","It is cold. Wear your coat.|Hava soğuk. Montunu giy.","Take your umbrella.|Şemsiyeni al.","It is hot and sunny.|Hava sıcak ve güneşli.","I like snowy days.|Karlı günleri severim.","I go to school by bus.|Okula otobüsle giderim.","I go to school on foot.|Okula yürüyerek giderim.","In summer, it is hot.|Yazın hava sıcaktır.","In winter, it is snowy.|Kışın hava karlıdır.","Look, a rainbow!|Bak, gökkuşağı!"],
+  D:["Mom|Good morning, Ela!|Günaydın Ela!","Ela|Good morning, mom! How is the weather?|Günaydın anne! Hava nasıl?","Mom|It is rainy and cold.|Yağmurlu ve soğuk.","Ela|Oh no! I need my umbrella.|Eyvah! Şemsiyeme ihtiyacım var.","Mom|And wear your boots, too.|Botlarını da giy.","Ela|Okay! Bye, mom!|Tamam! Hoşça kal anne!"],
+  R:{title:"A Winter Day",text:["Today is a cold winter day.|Bugün soğuk bir kış günü.","It is snowy and windy.|Hava karlı ve rüzgarlı.","Mert wears his coat, his scarf and his boots.|Mert montunu, atkısını ve botlarını giyer.","He goes to school by bus.|Okula otobüsle gider.","After school, he plays with snow.|Okuldan sonra karla oynar."],
+     q:["How is the weather?|Hava nasıl?|Snowy and windy|Hot and sunny|Rainy","How does Mert go to school?|Mert okula nasıl gider?|By bus|By car|On foot","What does he do after school?|Okuldan sonra ne yapar?|He plays with snow|He swims|He sleeps"]},
+  N:`<h3>Hava durumu</h3>${ex("How is the weather?","Hava nasıl?")}${ex("It is sunny.","Hava güneşli.")}${ex("It is snowy.","Hava karlı.")}<h3>Mevsimler: in + mevsim</h3>${ex("In summer, it is hot.","Yazın hava sıcak.")}${ex("In winter, it is cold.","Kışın hava soğuk.")}<h3>Ulaşım: by ... / on foot</h3>"by" = ile &nbsp; "on foot" = yürüyerek${ex("I go to school by bus.","Okula otobüsle giderim.")}${ex("I go to school on foot.","Okula yürüyerek giderim.")}`}
+]},
+
+{name:"4. Sınıf",sub:"Zamanlar ve uzun cümleler",icon:"🦅",themes:[
+ {name:"Günler ve Aylar",en:"School Life",icon:"📅",
+  W:["Pzt|Monday|Pazartesi","Salı|Tuesday|Salı","Çrş|Wednesday|Çarşamba","Prş|Thursday|Perşembe","Cuma|Friday|Cuma","Cmt|Saturday|Cumartesi","Paz|Sunday|Pazar","Oca|January|Ocak","Şub|February|Şubat","Mar|March|Mart","Nis|April|Nisan","May|May|Mayıs","Haz|June|Haziran","Tem|July|Temmuz","Ağu|August|Ağustos","Eyl|September|Eylül","Eki|October|Ekim","Kas|November|Kasım","Ara|December|Aralık","🎡|weekend|hafta sonu"],
+  S:["What day is it today?|Bugün günlerden ne?","It is Monday.|Bugün Pazartesi.","I have English on Friday.|Cuma günü İngilizce dersim var.","We play in the break.|Teneffüste oynarız.","My favourite day is Saturday.|En sevdiğim gün Cumartesi.","There are seven days in a week.|Bir haftada yedi gün var.","When is your birthday?|Doğum günün ne zaman?","My birthday is in May.|Doğum günüm mayısta.","School starts in September.|Okul eylülde başlar.","We do not go to school at the weekend.|Hafta sonu okula gitmeyiz.","Today is Tuesday. Tomorrow is Wednesday.|Bugün Salı. Yarın Çarşamba."],
+  D:["Can|When is your birthday, Deniz?|Doğum günün ne zaman Deniz?","Deniz|It is in June. And yours?|Haziranda. Ya seninki?","Can|My birthday is in December.|Benim doğum günüm aralıkta.","Deniz|What is your favourite day?|En sevdiğin gün hangisi?","Can|Saturday! We do not go to school.|Cumartesi! Okula gitmiyoruz.","Deniz|Me too!|Benim de!"],
+  R:{title:"Elif's Week",text:["Hi, I am Elif.|Merhaba, ben Elif.","I go to school from Monday to Friday.|Pazartesiden cumaya okula giderim.","On Monday, I have English and Maths.|Pazartesi İngilizce ve matematik dersim var.","On Wednesday, I have PE. It is my favourite day.|Çarşamba beden eğitimi var. En sevdiğim gün.","At the weekend, I visit my grandparents.|Hafta sonu büyükannemlerin evine giderim."],
+     q:["When does Elif have PE?|Elif'in beden eğitimi ne zaman?|On Wednesday|On Monday|On Sunday","What is her favourite day?|En sevdiği gün hangisi?|Wednesday|Monday|Friday","What does she do at the weekend?|Hafta sonu ne yapar?|She visits her grandparents|She goes to school|She swims"]},
+  N:`<h3>Günler</h3>Gün ve ay isimleri <b>büyük harfle</b> başlar.${ex("What day is it today?","Bugün günlerden ne?")}${ex("It is Wednesday.","Bugün Çarşamba.")}<h3>on + gün</h3>${ex("I have Maths on Tuesday.","Salı günü matematik dersim var.")}<h3>in + ay</h3>${ex("My birthday is in April.","Doğum günüm nisanda.")}${ex("School starts in September.","Okul eylülde başlar.")}<h3>at the weekend</h3>${ex("I play football at the weekend.","Hafta sonu futbol oynarım.")}`},
+
+ {name:"Sınıf Kuralları",en:"Classroom Life",icon:"📋",
+  W:["🏃|run|koşmak","🤫|be quiet|sessiz olmak","🍔|eat|yemek yemek","🥤|drink|içmek","🚪|come in|içeri girmek","🗑️|throw away|atmak","🧹|clean|temizlemek","🙋|ask|sormak","🤝|share|paylaşmak","📢|shout|bağırmak","⏳|wait|beklemek","🤲|help|yardım etmek","📱|use a phone|telefon kullanmak","👆|touch|dokunmak","🚶|line up|sıraya girmek"],
+  S:["Can I come in?|İçeri girebilir miyim?","Be quiet, please.|Lütfen sessiz ol.","Do not run in the classroom.|Sınıfta koşma.","Can I open the window?|Pencereyi açabilir miyim?","Sure, go ahead.|Tabii, buyur.","Sorry, you can not.|Üzgünüm, yapamazsın.","Do not eat in the class.|Derste yemek yeme.","Do not shout.|Bağırma.","Help your friends.|Arkadaşlarına yardım et.","Throw away the rubbish.|Çöpü at.","Can I go to the toilet?|Tuvalete gidebilir miyim?","Listen to your teacher.|Öğretmenini dinle."],
+  D:["Ali|Excuse me, teacher. Can I come in?|Afedersiniz öğretmenim. İçeri girebilir miyim?","Teacher|Yes, come in. Why are you late?|Evet, gel. Neden geç kaldın?","Ali|Sorry, the bus is late.|Özür dilerim, otobüs gecikti.","Teacher|Okay. Sit down and open your book.|Tamam. Otur ve kitabını aç.","Ali|Can I borrow a pencil?|Bir kalem ödünç alabilir miyim?","Teacher|Sure, here you are.|Tabii, buyur."],
+  R:{title:"Our Classroom Rules",text:["Be on time.|Zamanında gel.","Listen to the teacher.|Öğretmeni dinle.","Raise your hand to speak.|Konuşmak için parmak kaldır.","Do not run in the classroom.|Sınıfta koşma.","Do not eat in the class.|Derste yemek yeme.","Keep the classroom clean and help your friends.|Sınıfı temiz tut ve arkadaşlarına yardım et."],
+     q:["What do we do to speak?|Konuşmak için ne yaparız?|Raise our hand|Shout|Run","Can we eat in the class?|Derste yemek yiyebilir miyiz?|No, we can not|Yes, we can|Only cake","How must the classroom be?|Sınıf nasıl olmalı?|Clean|Dirty|Dark"]},
+  N:`<h3>Kurallar: emir cümleleri</h3>${ex("Be quiet.","Sessiz ol.")}${ex("Clean the board.","Tahtayı temizle.")}<h3>Yasaklar: Do not (Don't)</h3>${ex("Do not run.","Koşma.")}${ex("Do not eat in the class.","Derste yemek yeme.")}<h3>İzin isteme: Can I ...?</h3>${ex("Can I come in?","İçeri girebilir miyim?")}${ex("Sure, go ahead.","Tabii, buyur.")}${ex("Sorry, you can not.","Üzgünüm, yapamazsın.")}`},
+
+ {name:"Günüm",en:"Personal Life",icon:"⏰",
+  W:["⏰|wake up|uyanmak","👔|get dressed|giyinmek","🧼|wash my face|yüzümü yıkamak","🪥|brush my teeth|dişlerimi fırçalamak","🍳|have breakfast|kahvaltı yapmak","🏫|go to school|okula gitmek","🥪|have lunch|öğle yemeği yemek","🏠|come home|eve gelmek","📝|do homework|ödev yapmak","📺|watch TV|televizyon izlemek","🎮|play games|oyun oynamak","📖|read a book|kitap okumak","🍝|have dinner|akşam yemeği yemek","🚿|take a shower|duş almak","🛌|go to bed|yatmak"],
+  S:["What time is it?|Saat kaç?","It is nine o'clock.|Saat dokuz.","It is half past seven.|Saat yedi buçuk.","I wake up at seven o'clock.|Saat yedide uyanırım.","I have breakfast at eight.|Saat sekizde kahvaltı yaparım.","I go to school at half past eight.|Sekiz buçukta okula giderim.","I come home at three o'clock.|Saat üçte eve gelirim.","I do my homework in the evening.|Akşam ödevimi yaparım.","I play chess in my free time.|Boş zamanımda satranç oynarım.","She watches TV after dinner.|O akşam yemeğinden sonra televizyon izler.","He goes to bed at nine.|O saat dokuzda yatar.","What time do you get up?|Saat kaçta kalkarsın?"],
+  D:["Reporter|What time do you get up, Bora?|Saat kaçta kalkarsın Bora?","Bora|I get up at seven o'clock.|Saat yedide kalkarım.","Reporter|What do you do in the morning?|Sabah ne yaparsın?","Bora|I wash my face and have breakfast.|Yüzümü yıkar ve kahvaltı yaparım.","Reporter|What do you do in your free time?|Boş zamanında ne yaparsın?","Bora|I play games and read books.|Oyun oynarım ve kitap okurum."],
+  R:{title:"Melis's Day",text:["Melis gets up at seven o'clock.|Melis saat yedide kalkar.","She has breakfast with her family.|Ailesiyle kahvaltı yapar.","She goes to school at eight.|Saat sekizde okula gider.","After school, she does her homework.|Okuldan sonra ödevini yapar.","In the evening, she watches TV.|Akşam televizyon izler.","She goes to bed at half past nine.|Dokuz buçukta yatar."],
+     q:["What time does Melis get up?|Melis saat kaçta kalkar?|At seven|At nine|At eight","What does she do after school?|Okuldan sonra ne yapar?|She does her homework|She sleeps|She swims","When does she go to bed?|Ne zaman yatar?|At half past nine|At seven|At eight"]},
+  N:`<h3>Saat kaç?</h3><b>o'clock</b> = tam &nbsp; <b>half past</b> = buçuk${ex("What time is it?","Saat kaç?")}${ex("It is three o'clock.","Saat üç.")}${ex("It is half past four.","Saat dört buçuk.")}<h3>Geniş Zaman (Simple Present)</h3>Her gün yaptığımız şeyler. "at" + saat = saatte${ex("I wake up at seven.","Yedide uyanırım.")}${ex("We have lunch at twelve.","On ikide öğle yemeği yeriz.")}<h3>He / She / It → fiile -s</h3>${ex("She watches TV.","O televizyon izler.")}${ex("He plays chess.","O satranç oynar.")}${ex("He goes to bed at nine.","O dokuzda yatar.")}<h3>Soru: What time do you ...?</h3>${ex("What time do you go to school?","Okula saat kaçta gidersin?")}`},
+
+ {name:"Meslekler",en:"Family Life",icon:"👩‍⚕️",
+  W:["🧑‍⚕️|doctor|doktor","💉|nurse|hemşire","🦷|dentist|diş hekimi","👩‍🏫|teacher|öğretmen","🧑‍🍳|cook|aşçı","🧑‍🌾|farmer|çiftçi","👮|police officer|polis","🧑‍🚒|firefighter|itfaiyeci","🧑‍✈️|pilot|pilot","🐾|vet|veteriner","👷|engineer|mühendis","🎤|singer|şarkıcı","🧑‍🎨|artist|ressam","🧑‍🚀|astronaut|astronot","🧑‍🔧|mechanic|tamirci","🚖|driver|şoför","🍽️|waiter|garson"],
+  S:["What does your mother do?|Annen ne iş yapar?","She is a teacher.|O öğretmen.","My father is a doctor.|Babam doktor.","I want to be a pilot.|Pilot olmak istiyorum.","A vet helps animals.|Veteriner hayvanlara yardım eder.","A farmer works on a farm.|Çiftçi çiftlikte çalışır.","A pilot flies a plane.|Pilot uçak uçurur.","My brother is reading a book.|Erkek kardeşim kitap okuyor.","We are watching TV.|Televizyon izliyoruz.","What are you doing?|Ne yapıyorsun?","I am drawing a picture.|Resim çiziyorum.","She is cooking dinner.|O akşam yemeği pişiriyor."],
+  D:["Nisa|What does your father do, Kerem?|Baban ne iş yapar Kerem?","Kerem|He is a firefighter. He is very brave.|O itfaiyeci. Çok cesur.","Nisa|Wow! My mother is a nurse. She works in a hospital.|Vay! Annem hemşire. Hastanede çalışıyor.","Kerem|What do you want to be?|Sen ne olmak istiyorsun?","Nisa|I want to be an astronaut!|Astronot olmak istiyorum!","Kerem|Cool! I want to be a vet. I love animals.|Harika! Ben veteriner olmak istiyorum. Hayvanları severim."],
+  R:{title:"Busy People",text:["Mr. Ateş is a firefighter.|Ateş Bey itfaiyeci.","He is helping people now.|Şu an insanlara yardım ediyor.","Mrs. Kaya is a doctor.|Kaya Hanım doktor.","She is working at the hospital.|Hastanede çalışıyor.","Their son, Ege, is reading a book about space.|Oğulları Ege uzay hakkında bir kitap okuyor.","He wants to be an astronaut.|Astronot olmak istiyor."],
+     q:["What does Mr. Ateş do?|Ateş Bey ne iş yapar?|He is a firefighter|He is a doctor|He is a pilot","What is Ege doing?|Ege ne yapıyor?|He is reading a book|He is swimming|He is sleeping","What does Ege want to be?|Ege ne olmak istiyor?|An astronaut|A doctor|A cook"]},
+  N:`<h3>Meslek sorma</h3>${ex("What does your father do?","Baban ne iş yapar?")}${ex("He is a farmer.","O çiftçi.")}${ex("What do you want to be?","Ne olmak istiyorsun?")}${ex("I want to be a vet.","Veteriner olmak istiyorum.")}<h3>Şimdiki Zaman (Present Continuous)</h3>Şu an olanı anlatır: <b>am / is / are + fiil-ing</b>${ex("I am reading.","Okuyorum.")}${ex("She is cooking.","O yemek pişiriyor.")}${ex("They are playing.","Onlar oynuyor.")}<h3>Soru</h3>${ex("What are you doing?","Ne yapıyorsun?")}${ex("I am drawing a picture.","Resim çiziyorum.")}`},
+
+ {name:"Mahallem",en:"Neighbourhood",icon:"🏘️",
+  W:["🏥|hospital|hastane","🥖|bakery|fırın","🕌|mosque|cami","📚|library|kütüphane","🛒|supermarket|market","🏦|bank|banka","🏞️|park|park","💊|pharmacy|eczane","🏫|school|okul","📮|post office|postane","🚓|police station|karakol","🎬|cinema|sinema","🏛️|museum|müze","🍽️|restaurant|restoran","☕|café|kafe","🚏|bus stop|otobüs durağı","🏨|hotel|otel"],
+  S:["Where is the library?|Kütüphane nerede?","It is next to the park.|Parkın yanında.","The bank is between the bakery and the school.|Banka fırınla okulun arasında.","The cinema is opposite the museum.|Sinema müzenin karşısında.","Go straight.|Düz git.","Turn left.|Sola dön.","Turn right.|Sağa dön.","Excuse me, where is the bus stop?|Afedersiniz, otobüs durağı nerede?","It is on your left.|Solunuzda.","Is there a pharmacy near here?|Yakında eczane var mı?","Thank you very much!|Çok teşekkür ederim!"],
+  D:["Tourist|Excuse me, where is the museum?|Afedersiniz, müze nerede?","Selim|Go straight and turn left.|Düz gidin ve sola dönün.","Tourist|Is it next to the bank?|Bankanın yanında mı?","Selim|No, it is opposite the bank.|Hayır, bankanın karşısında.","Tourist|Thank you very much!|Çok teşekkür ederim!","Selim|You are welcome.|Rica ederim."],
+  R:{title:"My Neighbourhood",text:["This is my neighbourhood.|Bu benim mahallem.","There is a big park in the middle.|Ortada büyük bir park var.","The library is next to the park.|Kütüphane parkın yanında.","The bakery is opposite the library.|Fırın kütüphanenin karşısında.","I buy bread from the bakery every morning.|Her sabah fırından ekmek alırım.","The hospital is between the bank and the post office.|Hastane bankayla postanenin arasında."],
+     q:["Where is the library?|Kütüphane nerede?|Next to the park|Opposite the bank|In the hospital","What does the writer buy every morning?|Yazar her sabah ne alır?|Bread|Milk|Books","Where is the hospital?|Hastane nerede?|Between the bank and the post office|Next to the park|Opposite the café"]},
+  N:`<h3>Yer bildiren kelimeler</h3><b>next to</b> = yanında &nbsp; <b>between</b> = arasında &nbsp; <b>opposite</b> = karşısında${ex("The bakery is next to the bank.","Fırın bankanın yanında.")}${ex("The park is opposite the school.","Park okulun karşısında.")}${ex("The café is between the cinema and the hotel.","Kafe sinemayla otelin arasında.")}<h3>Yol tarifi</h3>${ex("Go straight.","Düz git.")}${ex("Turn left.","Sola dön.")}${ex("Turn right.","Sağa dön.")}<h3>Kibarca yol sorma</h3>${ex("Excuse me, where is the zoo?","Afedersiniz, hayvanat bahçesi nerede?")}`},
+
+ {name:"Yiyecek ve İçecek",en:"Food & Drinks",icon:"🍕",
+  W:["🍕|pizza|pizza","🍔|hamburger|hamburger","🥗|salad|salata","🍲|soup|çorba","🥛|milk|süt","🍟|chips|patates kızartması","💧|water|su","🧃|juice|meyve suyu","🥚|egg|yumurta","🧀|cheese|peynir","🍞|bread|ekmek","🍚|rice|pilav","🐟|fish|balık","🥙|kebab|kebap","🍰|cake|pasta","🍯|honey|bal","🍪|biscuit|bisküvi","🥪|sandwich|sandviç"],
+  S:["What is your favourite food?|En sevdiğin yemek ne?","My favourite food is pizza.|En sevdiğim yemek pizza.","Salad is healthy.|Salata sağlıklıdır.","Chips are unhealthy.|Patates kızartması sağlıksızdır.","Would you like some milk?|Biraz süt ister misin?","Yes, please.|Evet, lütfen.","No, thank you.|Hayır, teşekkürler.","I am hungry. Can I have a sandwich?|Açım. Bir sandviç alabilir miyim?","Fruit is good for you.|Meyve sana iyi gelir.","Do not eat too much cake.|Çok fazla pasta yeme.","I drink water every day.|Her gün su içerim."],
+  D:["Waiter|Hello! What would you like?|Merhaba! Ne istersiniz?","Ada|I would like a soup and a salad, please.|Bir çorba ve bir salata istiyorum lütfen.","Waiter|Would you like a drink?|İçecek ister misiniz?","Ada|Yes, orange juice, please.|Evet, portakal suyu lütfen.","Waiter|Here you are.|Buyurun.","Ada|Thank you!|Teşekkürler!"],
+  R:{title:"Healthy Food",text:["Healthy food makes us strong.|Sağlıklı yiyecekler bizi güçlü yapar.","Fruit, vegetables, fish and milk are healthy.|Meyve, sebze, balık ve süt sağlıklıdır.","Chips, cola and too much cake are unhealthy.|Patates kızartması, kola ve çok fazla pasta sağlıksızdır.","Ayşe eats an apple every day.|Ayşe her gün bir elma yer.","She drinks lots of water.|Bol bol su içer.","She is very healthy!|O çok sağlıklı!"],
+     q:["Is fish healthy?|Balık sağlıklı mı?|Yes, it is|No, it is not|It is a drink","What does Ayşe eat every day?|Ayşe her gün ne yer?|An apple|Chips|Cake","What does healthy food do?|Sağlıklı yiyecek ne yapar?|It makes us strong|It makes us ill|It makes us sad"]},
+  N:`<h3>Sağlıklı - sağlıksız</h3><b>healthy</b> = sağlıklı &nbsp; <b>unhealthy</b> = sağlıksız${ex("Soup is healthy.","Çorba sağlıklıdır.")}${ex("Hamburgers are unhealthy.","Hamburgerler sağlıksızdır.")}<h3>İkram etme: Would you like ...?</h3>${ex("Would you like some soup?","Biraz çorba ister misin?")}${ex("Yes, please.","Evet, lütfen.")}${ex("No, thank you.","Hayır, teşekkürler.")}<h3>Sipariş verme: I would like ...</h3>${ex("I would like a sandwich, please.","Bir sandviç istiyorum lütfen.")}`},
+
+ {name:"Ülkeler ve Milletler",en:"Countries",icon:"🌍",
+  W:["🇹🇷|Türkiye|Türkiye","🇬🇧|the UK|Birleşik Krallık","🇺🇸|the USA|Amerika","🇩🇪|Germany|Almanya","🇫🇷|France|Fransa","🇮🇹|Italy|İtalya","🇪🇸|Spain|İspanya","🇯🇵|Japan|Japonya","🇨🇳|China|Çin","🇧🇷|Brazil|Brezilya","🇷🇺|Russia|Rusya","🇦🇿|Azerbaijan|Azerbaycan","🇪🇬|Egypt|Mısır","🇰🇷|Korea|Kore"],
+  S:["Where are you from?|Nerelisin?","I am from Türkiye.|Türkiyeliyim.","I am Turkish.|Ben Türküm.","She is from Japan. She is Japanese.|O Japonyalı. O Japon.","He is from Italy. He is Italian.|O İtalyalı. O İtalyan.","Where is Hans from?|Hans nereli?","He is from Germany. He is German.|O Almanyalı. O Alman.","Pizza comes from Italy.|Pizza İtalya'dan gelir.","Sushi is a Japanese dish.|Suşi bir Japon yemeğidir.","Can you speak English?|İngilizce konuşabilir misin?","Yes, I can speak a little English.|Evet, biraz İngilizce konuşabilirim."],
+  D:["Yuki|Hello! I am Yuki.|Merhaba! Ben Yuki.","Ece|Hi Yuki! Where are you from?|Selam Yuki! Nerelisin?","Yuki|I am from Japan. I am Japanese. And you?|Japonyalıyım. Japonum. Ya sen?","Ece|I am from Türkiye. I am Turkish.|Türkiyeliyim. Türküm.","Yuki|Can you speak Japanese?|Japonca konuşabilir misin?","Ece|No, I can not. But I can speak English!|Hayır. Ama İngilizce konuşabilirim!"],
+  R:{title:"My Pen Pal",text:["Hi! My name is Lucas.|Merhaba! Benim adım Lucas.","I am ten years old.|On yaşındayım.","I am from Brazil. I am Brazilian.|Brezilyalıyım.","I can speak Portuguese and English.|Portekizce ve İngilizce konuşabilirim.","My favourite food is rice and beans.|En sevdiğim yemek pilav ve fasulye.","I love football!|Futbolu çok severim!"],
+     q:["Where is Lucas from?|Lucas nereli?|Brazil|Spain|Japan","How old is he?|Kaç yaşında?|Ten|Nine|Twelve","What does he love?|Neyi çok seviyor?|Football|Chess|Music"]},
+  N:`<h3>Nerelisin?</h3>${ex("Where are you from?","Nerelisin?")}${ex("I am from Türkiye.","Türkiyeliyim.")}${ex("Where is she from?","O nereli?")}${ex("She is from Spain.","O İspanyalı.")}<h3>Ülke → Millet</h3>${ex("Türkiye - Turkish","Türkiye - Türk")}${ex("Japan - Japanese","Japonya - Japon")}${ex("Italy - Italian","İtalya - İtalyan")}${ex("Germany - German","Almanya - Alman")}<h3>Dil konuşma</h3>${ex("Can you speak English?","İngilizce konuşabilir misin?")}`}
+]}
+];
+
+/* ===================== HAZIRLIK ===================== */
+GRADES.forEach((g,gi)=>g.themes.forEach((t,ti)=>{
+  t.g=gi;t.t=ti;
+  t.words=(t.W||[]).map(s=>s.split("|"));
+  t.sents=(t.S||[]).map(s=>s.split("|"));
+  t.dlg=(t.D||[]).map(s=>s.split("|"));
+  t.read=t.R?{title:t.R.title,text:t.R.text.map(s=>s.split("|")),q:t.R.q.map(s=>s.split("|"))}:null;
+}));
+const IS_APP=!!window.AndroidApp;
+const SR_WEB=window.SpeechRecognition||window.webkitSpeechRecognition||null;
+const SR=IS_APP?(function(){try{return AndroidApp.sttAvailable()}catch(e){return false}})():!!SR_WEB;
+const isTxt=s=>/^[A-Za-zÇĞİÖŞÜçğıöşü0-9]+$/.test(s);
+const $=id=>document.getElementById(id);
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+const pick=(a,n)=>shuffle(a).slice(0,n);
+const esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+
+/* ===================== KAYIT ===================== */
+let ST={stars:{},mistakes:[],rate:0.8,sfx:true};
+try{Object.assign(ST,JSON.parse(localStorage.getItem("mingoV1")||"{}"))}catch(e){}
+function save(){try{localStorage.setItem("mingoV1",JSON.stringify(ST))}catch(e){}}
+const skey=(g,t,m)=>g+"-"+t+"-"+m;
+function addMistake(r){if(r&&!ST.mistakes.includes(r)){ST.mistakes.push(r);if(ST.mistakes.length>200)ST.mistakes.shift();save()}}
+function delMistake(r){const i=ST.mistakes.indexOf(r);if(i>=0){ST.mistakes.splice(i,1);save()}}
+
+/* ===================== SES ===================== */
+let voice=null;
+function pickVoice(){if(!window.speechSynthesis)return;const v=speechSynthesis.getVoices();voice=v.find(x=>/en[-_]US/i.test(x.lang))||v.find(x=>/^en/i.test(x.lang))||null}
+if(window.speechSynthesis){pickVoice();speechSynthesis.onvoiceschanged=pickVoice}
+let sayToken=0;window.__ttsCB={};
+window.__ttsDone=id=>{const f=window.__ttsCB[id];delete window.__ttsCB[id];f&&f()};
+function say(t,o={}){
+  const my=++sayToken;let done=false;
+  const fin=()=>{if(done||my!==sayToken)return;done=true;o.onend&&o.onend()};
+  if(IS_APP){
+    const id="u"+my;window.__ttsCB[id]=fin;
+    try{AndroidApp.speak(t,ST.rate,o.pitch||1.05,id)}catch(e){}
+    if(o.onend)setTimeout(fin,1500+t.length*95/ST.rate);
+    return;
+  }
+  if(!window.speechSynthesis){if(o.onend)setTimeout(fin,600);return}
+  speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(t);
+  u.lang="en-US";u.rate=ST.rate;u.pitch=o.pitch||1.1;if(voice)u.voice=voice;
+  u.onend=fin;u.onerror=fin;
+  speechSynthesis.speak(u);
+  if(o.onend)setTimeout(fin,1500+t.length*95/ST.rate);
+}
+function stopSay(){sayToken++;if(IS_APP){try{AndroidApp.stop()}catch(e){}return}if(window.speechSynthesis)speechSynthesis.cancel()}
+let ac=null;
+function beep(good){
+  if(!ST.sfx)return;
+  try{
+    ac=ac||new (window.AudioContext||window.webkitAudioContext)();
+    (good?[523,659,784]:[300,220]).forEach((f,i)=>{
+      const o=ac.createOscillator(),g=ac.createGain();
+      o.frequency.value=f;o.type="triangle";o.connect(g);g.connect(ac.destination);
+      const t=ac.currentTime+i*0.12;
+      g.gain.setValueAtTime(0.22,t);g.gain.exponentialRampToValueAtTime(0.001,t+0.25);
+      o.start(t);o.stop(t+0.25);
+    });
+  }catch(e){}
+}
+function confetti(n=10){
+  const e=["⭐","🎉","✨","🌟","🎈"];
+  for(let i=0;i<n;i++){
+    const s=document.createElement("div");s.className="fly";s.textContent=e[i%5];
+    s.style.left=(10+Math.random()*80)+"vw";s.style.top=(55+Math.random()*30)+"vh";
+    document.body.appendChild(s);setTimeout(()=>s.remove(),1300);
+  }
+}
+const praise=()=>pick(["Süper! 🎉","Aferin! 👏","Harika! 🌟","Bravo! 🥳","Mükemmel! 🏅","Çok iyi! 💯"],1)[0];
+document.addEventListener("click",e=>{const x=e.target.closest("[data-say]");if(x)say(x.dataset.say)});
+
+/* ===================== GEZİNME ===================== */
+let G=null,T=null,stack=["home"],lastGame=null;const TITLES={};
+const TH=()=>GRADES[G].themes[T];
+function show(id,title,push=true){
+  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("on"));
+  $(id).classList.add("on");
+  if(title!==undefined)TITLES[id]=title;
+  $("head").textContent=id==="home"?"":(TITLES[id]||"");
+  $("headLogo").style.display=id==="home"?"block":"none";
+  if(push&&stack[stack.length-1]!==id)stack.push(id);
+  $("back").style.visibility=id==="home"?"hidden":"visible";
+  window.scrollTo(0,0);
+}
+function goBack(){
+  stopSay();stopMic();
+  if(stack.length>1)stack.pop();
+  const id=stack[stack.length-1];
+  ({home:renderHome,themes:renderThemes,menu:renderMenu,mistakes:openMistakesDraw})[id]?.();
+  show(id,undefined,false);
+}
+
+/* ===================== MODLAR ===================== */
+const spellable=t=>t.words.filter(w=>/^[a-z]{3,9}$/i.test(w[1]));
+const MODES={
+  quiz:{e:"🎯",n:"Resim-Kelime",ok:t=>t.words.length>=4},
+  tf:{e:"✅",n:"Doğru mu?",ok:t=>t.words.length>=4},
+  match:{e:"🔗",n:"Eşleştir",ok:t=>t.words.length>=5},
+  spell:{e:"🔡",n:"Harf Diz",ok:t=>spellable(t).length>=4},
+  listen:{e:"👂",n:"Dinle Seç",ok:t=>t.sents.length>=4},
+  blank:{e:"✏️",n:"Boşluk Doldur",ok:t=>t.sents.length>=4},
+  build:{e:"🧩",n:"Cümle Kur",ok:t=>t.sents.length>=3},
+  speak:{e:"🎙️",n:"Konuş",ok:t=>!!SR},
+  read:{e:"📰",n:"Okuma Soruları",ok:t=>!!t.read,hidden:true},
+  exam:{e:"🏆",n:"Ünite Sınavı",ok:t=>t.words.length>=4}
+};
+function themeStars(t){
+  let s=0,n=0;
+  for(const m in MODES)if(MODES[m].ok(t)){n+=3;s+=ST.stars[skey(t.g,t.t,m)]||0}
+  return{s,n};
+}
+const starTxt=v=>"⭐".repeat(v||0)+"☆".repeat(3-(v||0));
+function totalStars(){$("total").textContent=Object.values(ST.stars).reduce((a,b)=>a+b,0)}
+
+/* ===================== ANA SAYFA ===================== */
+const ALLW=[];GRADES.forEach(g=>g.themes.forEach(t=>t.words.forEach(w=>ALLW.push({w,g:g.name,t:t.name}))));
+function renderHome(){
+  const d=Math.floor(Date.now()/864e5),x=ALLW[(d*7919)%ALLW.length].w;
+  $("wod").innerHTML=`<div class="pe ${isTxt(x[0])?"txt":""}">${x[0]}</div><div><small>✨ Günün Kelimesi</small><b>${esc(x[1])}</b><span style="color:#777">${esc(x[2])}</span></div>`;
+  $("wod").onclick=()=>say(x[1]);
+  const box=$("grades");box.innerHTML="";
+  GRADES.forEach((g,gi)=>{
+    let s=0,n=0;g.themes.forEach(t=>{const r=themeStars(t);s+=r.s;n+=r.n});
+    const b=document.createElement("button");b.className="tile gr";
+    b.innerHTML=`<span class="e">${g.icon}</span><span class="n">${g.name}</span><span class="t">${g.sub}</span><span class="s">⭐ ${s} / ${n}</span><div class="bar2"><div style="width:${n?s/n*100:0}%"></div></div>`;
+    b.onclick=()=>{G=gi;renderThemes();show("themes",g.name)};
+    box.appendChild(b);
+  });
+  const mb=$("mBadge");mb.style.display=ST.mistakes.length?"block":"none";mb.textContent=ST.mistakes.length;
+  totalStars();
+}
+function renderThemes(){
+  const g=GRADES[G];
+  $("gTitle").textContent=g.name+" • "+g.themes.length+" ünite 📘";
+  const box=$("themeGrid");box.innerHTML="";
+  g.themes.forEach((t,ti)=>{
+    const r=themeStars(t);
+    const b=document.createElement("button");b.className="tile";
+    b.innerHTML=`<span class="e">${t.icon}</span><span class="n">${ti+1}. ${t.name}</span><span class="t">${t.en}</span><span class="s">⭐ ${r.s} / ${r.n}</span><div class="bar2"><div style="width:${r.s/r.n*100}%"></div></div>`;
+    b.onclick=()=>{T=ti;renderMenu();show("menu",t.name);say(t.en)};
+    box.appendChild(b);
+  });
+  totalStars();
+}
+function renderMenu(){
+  const t=TH();
+  $("menuIcon").textContent=t.icon;$("menuName").textContent=t.en;
+  $("menuTr").textContent=GRADES[G].name+" • "+t.name+" • "+t.words.length+" kelime"+(t.sents.length?" • "+t.sents.length+" cümle":"");
+  const box=$("menuGrid");box.innerHTML="";
+  const sec=s=>{const d=document.createElement("div");d.className="sec";d.textContent=s;box.appendChild(d)};
+  const tile=(e,n,s,f,cls="")=>{const b=document.createElement("button");b.className="tile "+cls;
+    b.innerHTML=`<span class="e">${e}</span><span class="n">${n}</span><span class="${s.includes("⭐")||s.includes("☆")?"s":"t"}">${s}</span>`;b.onclick=f;box.appendChild(b)};
+  sec("📚 Öğren");
+  tile("🃏","Kelimeler",t.words.length+" kart",()=>startCards("words"));
+  if(t.sents.length)tile("💬","Cümleler",t.sents.length+" cümle",()=>startCards("sents"));
+  if(t.dlg.length)tile("🗨️","Diyalog","Konuşmayı dinle",openDialog);
+  if(t.read)tile("📰","Okuma",starTxt(ST.stars[skey(G,T,"read")]),openReading);
+  if(t.N)tile("📖","Konu Anlatımı","Kuralı öğren",openNote);
+  sec("🎮 Oyna");
+  for(const m in MODES){const M=MODES[m];if(m==="exam"||M.hidden||!M.ok(t))continue;
+    tile(M.e,M.n,starTxt(ST.stars[skey(G,T,m)]),()=>startMode(m))}
+  sec("🏆 Sınav");
+  if(MODES.exam.ok(t))tile("🏆","Ünite Sınavı",starTxt(ST.stars[skey(G,T,"exam")]),()=>startMode("exam"),"wide");
+  totalStars();
+}
+
+/* ===================== KARTLAR ===================== */
+let CM="words",ci=0;
+function startCards(m){CM=m;ci=0;show("cards",m==="sents"?"Cümleler":"Kelimeler");showCard()}
+function showCard(){
+  const t=TH(),list=CM==="sents"?t.sents:t.words,it=list[ci],sh=$("cShow");
+  sh.className="big";sh.style.minHeight="";
+  if(CM==="sents"){sh.innerHTML=`<span class="sent">${esc(it[0])}</span>`;sh.style.minHeight="130px";$("cWord").textContent="";$("cTr").textContent=it[1]}
+  else{
+    if(t.abc)sh.innerHTML=`<span class="letter">${it[3]}${it[3].toLowerCase()}</span><span>${it[0]}</span>`;
+    else{sh.textContent=it[0];if(isTxt(it[0]))sh.classList.add("txt")}
+    $("cWord").textContent=it[1];$("cTr").textContent=it[2];
+  }
+  $("cCount").textContent=(ci+1)+" / "+list.length;sayCard();
+}
+function sayCard(){const t=TH();if(CM==="sents")return say(t.sents[ci][0]);const it=t.words[ci];say(t.abc?it[3]+". "+it[3]+" is for "+it[1]:it[1])}
+function moveCard(n){const t=TH(),L=(CM==="sents"?t.sents:t.words).length;ci=(ci+n+L)%L;showCard()}
+
+/* ===================== KONU / DİYALOG / OKUMA ===================== */
+function openNote(){$("noteBox").innerHTML=TH().N;show("noteScr","Konu Anlatımı")}
+function toggleTr(id){$(id).classList.toggle("hideTr")}
+function openDialog(){
+  const t=TH(),side={};let k=0;
+  $("chat").innerHTML=t.dlg.map((d,i)=>{if(!(d[0] in side))side[d[0]]=k++%2?"r":"l";
+    return `<div class="bub ${side[d[0]]}" id="bub${i}" data-i="${i}"><div class="who">${esc(d[0])}</div><div class="en">${esc(d[1])}</div><div class="tt">${esc(d[2])}</div></div>`}).join("");
+  $("chat").querySelectorAll(".bub").forEach(b=>b.onclick=()=>sayLine(+b.dataset.i));
+  show("dialog","Diyalog");
+}
+function sayLine(i,next){
+  const t=TH(),b=$("bub"+i);document.querySelectorAll(".bub").forEach(x=>x.classList.remove("now"));
+  if(!b)return;b.classList.add("now");b.scrollIntoView({block:"center",behavior:"smooth"});
+  say(t.dlg[i][1],{pitch:b.classList.contains("r")?0.85:1.3,onend:next});
+}
+function playDialog(){const n=TH().dlg.length;const go=i=>{if(i<n&&$("dialog").classList.contains("on"))sayLine(i,()=>setTimeout(()=>go(i+1),350))};go(0)}
+function openReading(){
+  const r=TH().read;$("rTitle2").textContent=r.title;
+  $("rText").innerHTML=r.text.map((s,i)=>`<div class="rline" id="rl${i}" data-i="${i}"><div class="ren">${esc(s[0])}</div><div class="rtr">${esc(s[1])}</div></div>`).join("");
+  $("rText").classList.add("hideTr");
+  $("rText").querySelectorAll(".rline").forEach(l=>l.onclick=()=>readLine(+l.dataset.i));
+  show("reading","Okuma Parçası");
+}
+function readLine(i,next){document.querySelectorAll(".rline").forEach(x=>x.classList.remove("now"));const l=$("rl"+i);if(!l)return;l.classList.add("now");say(TH().read.text[i][0],{onend:next})}
+function playReading(){const n=TH().read.text.length;const go=i=>{if(i<n&&$("reading").classList.contains("on"))readLine(i,()=>setTimeout(()=>go(i+1),250))};go(0)}
+
+/* ===================== SORU ÜRETİCİLER ===================== */
+const ref=(t,k,i)=>t.g+"|"+t.t+"|"+k+"|"+i;
+function qWord(t,w,type){
+  const i=t.words.indexOf(w),others=pick(t.words.filter(x=>x!==w&&x[1]!==w[1]&&x[0]!==w[0]),3),opts=shuffle([w,...others]);
+  const ans=opts.indexOf(w),r=ref(t,"w",i);
+  if(type===0)return{prompt:"Dinle ve doğru resmi bul 👂",html:`<span>🔊</span>`,spk:true,sayFirst:w[1],opts:opts.map(o=>o[0]),em:true,ans,sayAfter:w[1],ref:r};
+  if(type===1)return{prompt:"Bunun İngilizcesi ne? 🤔",html:esc(w[0]),txt:isTxt(w[0]),opts:opts.map(o=>o[1]),ans,sayAfter:w[1],ref:r};
+  return{prompt:"Bu kelimenin Türkçesi ne? 🇹🇷",html:`<span class="word" style="font-size:40px;margin:0">${esc(w[1])}</span>`,sayFirst:w[1],opts:opts.map(o=>o[2]),ans,sayAfter:w[1],ref:r};
+}
+function genQuiz(t,n=10){return pick(t.words,Math.min(n,t.words.length)).map((w,i)=>qWord(t,w,i%3))}
+function genTF(t,n=10){
+  return pick(t.words,Math.min(n,t.words.length)).map(w=>{
+    const truth=Math.random()<0.5,shown=truth?w:pick(t.words.filter(x=>x!==w&&x[1]!==w[1]),1)[0];
+    return{prompt:"Resim ve kelime eşleşiyor mu?",html:`<span class="${isTxt(w[0])?"letter":""}" style="${isTxt(w[0])?"font-size:56px":""}">${esc(w[0])}</span><span class="word" style="font-size:32px;margin:6px 0 0">${esc(shown[1])}</span>`,
+      sayFirst:shown[1],opts:["✅ Doğru","❌ Yanlış"],ans:truth?0:1,sayAfter:w[1],ref:ref(t,"w",t.words.indexOf(w)),
+      wrongMsg:truth?"Bu doğruydu: "+w[1]:"Bunun adı: "+w[1]};
+  });
+}
+function qListen(t,s){
+  const i=t.sents.indexOf(s),opts=shuffle([s,...pick(t.sents.filter(x=>x!==s),3)]);
+  return{prompt:"Cümleyi dinle, anlamını seç 👂",html:"<span>🔊</span>",spk:true,sayFirst:s[0],opts:opts.map(o=>o[1]),one:true,ans:opts.indexOf(s),sayAfter:s[0],ref:ref(t,"s",i),wrongMsg:s[0]};
+}
+function genListen(t,n=8){return pick(t.sents,Math.min(n,t.sents.length)).map(s=>qListen(t,s))}
+const toks=s=>s.replace(/[.,!?]/g,"").split(" ").filter(Boolean);
+function qBlank(t,s){
+  const i=t.sents.indexOf(s),tk=toks(s[0]);
+  let cand=tk.map((w,k)=>({w,k})).filter(x=>x.w.length>=3&&x.k>0&&!/^(the|and)$/i.test(x.w));
+  if(!cand.length)cand=tk.map((w,k)=>({w,k})).filter(x=>x.k>0);
+  if(!cand.length)cand=[{w:tk[0],k:0}];
+  const c=pick(cand,1)[0];
+  const pool=[...new Set([...t.sents.flatMap(x=>toks(x[0])),...t.words.map(w=>w[1]).filter(w=>!w.includes(" "))])]
+    .filter(w=>w.toLowerCase()!==c.w.toLowerCase()&&w.length>=2&&!/^[A-Z]/.test(w)===!/^[A-Z]/.test(c.w));
+  const ds=pick(pool,3),opts=shuffle([c.w,...ds]);
+  let shownWords=s[0].split(" "),cnt=-1;
+  const html=shownWords.map(w=>{const clean=w.replace(/[.,!?]/g,"");if(clean)cnt++;return cnt===c.k&&clean?w.replace(clean,'<span class="blank">?</span>'):esc(w)}).join(" ");
+  return{prompt:"Boşluğa hangi kelime gelir? ✏️<small>"+esc(s[1])+"</small>",html:`<span class="sent" style="font-size:25px">${html}</span>`,opts,ans:opts.indexOf(c.w),sayAfter:s[0],ref:ref(t,"s",i),wrongMsg:s[0]};
+}
+function genBlank(t,n=8){return pick(t.sents,Math.min(n,t.sents.length)).map(s=>qBlank(t,s))}
+function genRead(t){
+  const r=t.read,pass=r.text.map(x=>esc(x[0])).join(" ");
+  return r.q.map(q=>{const opts=shuffle([q[2],q[3],q[4]]);
+    return{prompt:esc(q[0])+"<small>"+esc(q[1])+"</small>",html:`<div class="passage">${pass}</div>`,sayFirst:q[0],opts,one:true,ans:opts.indexOf(q[2]),sayAfter:q[2]}});
+}
+function genExam(t){
+  let q=[...genQuiz(t,5),...genTF(t,3)];
+  if(t.sents.length>=4)q.push(...genListen(t,3),...genBlank(t,3));else q.push(...genQuiz(t,4));
+  if(t.read)q.push(...pick(genRead(t),2));
+  return shuffle(q).slice(0,15);
+}
+
+/* ===================== ÇOKTAN SEÇMELİ MOTORU ===================== */
+let M=null;
+function runMCQ(title,qs,mode){M={qs,i:0,score:0,mode,lock:false};show("mcq",title);drawQ()}
+function drawQ(){
+  const q=M.qs[M.i];M.lock=false;
+  $("bar").style.width=(M.i/M.qs.length*100)+"%";
+  $("qText").innerHTML=q.prompt;$("msg").textContent="";
+  const sh=$("qShow");sh.className="big"+(q.spk?" spk":"")+(q.txt?" txt":"");sh.innerHTML=q.html;
+  sh.onclick=()=>q.sayFirst&&say(q.sayFirst);
+  const box=$("opts");box.innerHTML="";
+  const one=q.one||q.opts.some(o=>o.length>16);box.className="opts"+(one&&!q.em?" one":"");
+  q.opts.forEach((o,k)=>{const b=document.createElement("button");b.className="opt"+(q.em?" em"+(isTxt(o)?" txt":""):"");b.textContent=o;b.onclick=()=>answerQ(b,k);box.appendChild(b)});
+  if(q.sayFirst)setTimeout(()=>{if(M&&M.qs[M.i]===q)say(q.sayFirst)},350);
+}
+function answerQ(b,k){
+  if(M.lock)return;M.lock=true;
+  const q=M.qs[M.i],ok=k===q.ans,btns=[...$("opts").children];
+  if(ok){b.classList.add("ok");M.score++;beep(true);confetti(6);$("msg").textContent=praise();if(M.mode==="rev")delMistake(q.ref)}
+  else{b.classList.add("no");b.classList.add("shake");btns[q.ans].classList.add("ok");beep(false);$("msg").textContent=q.wrongMsg?"👉 "+q.wrongMsg:"Doğrusu işaretlendi 💪";addMistake(q.ref)}
+  if(q.sayAfter)say(q.sayAfter);
+  setTimeout(()=>{M.i++;if(M.i<M.qs.length)drawQ();else finish(M.mode,M.score,M.qs.length)},ok?1400:2400);
+}
+
+/* ===================== EŞLEŞTİR ===================== */
+let MT=null;
+function startMatch(){
+  const t=TH(),w=pick(t.words,Math.min(10,t.words.length));
+  MT={rounds:[w.slice(0,5),w.slice(5)].filter(r=>r.length>=3),r:0,err:0,sel:null};
+  show("match","Eşleştir");drawMatch();
+}
+function drawMatch(){
+  const R=MT.rounds[MT.r];MT.left=R.length;MT.sel=null;$("mMsg").textContent="Tur "+(MT.r+1)+" / "+MT.rounds.length;
+  const mk=(list,side)=>{const c=$(side==="L"?"mL":"mR");c.innerHTML="";
+    list.forEach(w=>{const b=document.createElement("button");b.className="mi"+(side==="R"?" em"+(isTxt(w[0])?" txt":""):"");
+      b.textContent=side==="L"?w[1]:w[0];b.w=w;b.side=side;b.onclick=()=>tapMatch(b);c.appendChild(b)})};
+  mk(shuffle(R),"L");mk(shuffle(R),"R");
+}
+function tapMatch(b){
+  if(b.classList.contains("done"))return;
+  if(b.side==="L")say(b.w[1]);
+  if(!MT.sel||MT.sel.side===b.side){if(MT.sel)MT.sel.classList.remove("sel");MT.sel=b;b.classList.add("sel");return}
+  const a=MT.sel;MT.sel=null;a.classList.remove("sel");
+  if(a.w===b.w){
+    beep(true);[a,b].forEach(x=>{x.classList.add("ok");setTimeout(()=>x.classList.add("done"),250)});
+    if(--MT.left===0){confetti();setTimeout(()=>{MT.r++;if(MT.r<MT.rounds.length)drawMatch();else{const s=MT.err===0?3:MT.err<=3?2:1;finish("match",null,null,s,MT.err+" hata yaptın")}},700)}
+  }else{beep(false);MT.err++;[a,b].forEach(x=>{x.classList.remove("shake");void x.offsetWidth;x.classList.add("shake")})}
+}
+
+/* ===================== HARF DİZ ===================== */
+let SP=null;
+function startSpell(){SP={list:pick(spellable(TH()),8),i:0,score:0};show("spell","Harf Diz");drawSpell()}
+function drawSpell(){
+  const w=SP.list[SP.i];SP.tries=0;SP.picked=[];
+  $("spBar").style.width=(SP.i/SP.list.length*100)+"%";
+  const p=$("spPic");p.className="big"+(isTxt(w[0])?" txt":"");p.textContent=w[0];
+  $("spTr").textContent=w[2];$("spMsg").textContent="";
+  const letters=w[1].toLowerCase().split("");
+  if(G>=2)letters.push(...pick("abcdefghijklmnoprstuwy".split("").filter(c=>!letters.includes(c)),2));
+  SP.pool=shuffle(letters.map((c,i)=>({c,i})));drawSpellUI();
+}
+function drawSpellUI(){
+  const w=SP.list[SP.i][1].toLowerCase(),sl=$("spSlots");sl.className="slot";sl.style.borderColor="#fff";sl.innerHTML="";
+  for(let k=0;k<w.length;k++){const d=document.createElement("div");d.className="sl";d.textContent=SP.picked[k]?SP.picked[k].c:"";sl.appendChild(d)}
+  const pool=$("spPool");pool.innerHTML="";
+  SP.pool.forEach(p=>{if(SP.picked.includes(p))return;const b=document.createElement("button");b.className="chip lt";b.textContent=p.c;
+    b.onclick=()=>{if(SP.picked.length<w.length){SP.picked.push(p);drawSpellUI();checkSpell()}};pool.appendChild(b)});
+}
+function spUndo(){if(SP.picked.length){SP.picked.pop();drawSpellUI()}}
+function checkSpell(){
+  const word=SP.list[SP.i][1],w=word.toLowerCase();if(SP.picked.length<w.length)return;
+  const sl=$("spSlots");
+  if(SP.picked.map(p=>p.c).join("")===w){sl.classList.add("ok");beep(true);confetti(6);if(!SP.tries)SP.score++;$("spMsg").textContent=praise();say(word);setTimeout(nextSpell,1500)}
+  else{sl.classList.add("no");beep(false);SP.tries++;addMistake(ref(TH(),"w",TH().words.indexOf(SP.list[SP.i])));
+    if(SP.tries>=2){$("spMsg").textContent="Doğrusu: "+word;say(word);setTimeout(nextSpell,2200)}
+    else{$("spMsg").textContent="Tekrar dene 💪";setTimeout(()=>{SP.picked=[];drawSpellUI()},800)}}
+}
+function nextSpell(){SP.i++;if(SP.i<SP.list.length)drawSpell();else finish("spell",SP.score,SP.list.length)}
+
+/* ===================== CÜMLE KUR ===================== */
+let B=null;
+function startBuild(){B={list:pick(TH().sents,8),i:0,score:0};show("build","Cümle Kur");showB()}
+function showB(){
+  B.tries=0;B.picked=[];
+  $("bBar").style.width=(B.i/B.list.length*100)+"%";$("bTr").textContent=B.list[B.i][1];$("bMsg").textContent="";
+  const words=toks(B.list[B.i][0]);let mixed=shuffle(words.map((w,i)=>({w,i})));
+  if(words.length>1&&mixed.every((x,i)=>x.i===i))mixed.reverse();
+  B.pool=mixed;drawB();
+}
+function drawB(){
+  const slot=$("slot"),pool=$("pool");slot.className="slot";slot.innerHTML=B.picked.length?"":'<span style="color:#aaa">Buraya dizilecek</span>';pool.innerHTML="";
+  B.picked.forEach((p,k)=>{const c=document.createElement("button");c.className="chip";c.textContent=p.w;c.onclick=()=>{B.picked.splice(k,1);drawB()};slot.appendChild(c)});
+  B.pool.forEach(p=>{if(B.picked.includes(p))return;const c=document.createElement("button");c.className="chip";c.textContent=p.w;c.onclick=()=>{B.picked.push(p);say(p.w);drawB();checkB()};pool.appendChild(c)});
+}
+function undoChip(){if(B.picked.length){B.picked.pop();drawB()}}
+function checkB(){
+  const s=B.list[B.i],target=toks(s[0]);if(B.picked.length<target.length)return;
+  const slot=$("slot"),m=$("bMsg");
+  if(B.picked.map(p=>p.w).join(" ")===target.join(" ")){slot.classList.add("ok");beep(true);confetti(6);if(!B.tries)B.score++;m.textContent=praise();say(s[0]);setTimeout(nextB,2000)}
+  else{slot.classList.add("no");beep(false);B.tries++;addMistake(ref(TH(),"s",TH().sents.indexOf(s)));
+    if(B.tries>=2){m.textContent="Doğrusu: "+s[0];say(s[0]);setTimeout(nextB,2800)}
+    else{m.textContent="Tekrar dene 💪";setTimeout(()=>{B.picked=[];drawB();$("bMsg").textContent="Tekrar dene 💪"},900)}}
+}
+function nextB(){B.i++;if(B.i<B.list.length)showB();else finish("build",B.score,B.list.length)}
+
+/* ===================== KONUŞ ===================== */
+let SK=null,rec=null;
+function startSpeak(){
+  const t=TH(),items=[...pick(t.words,t.sents.length?4:8).map(w=>({en:w[1],tr:w[2],pic:w[0]})),...pick(t.sents,4).map(s=>({en:s[0],tr:s[1],pic:""}))];
+  SK={list:shuffle(items).slice(0,8),i:0,score:0};show("speak","Konuş");drawSK();
+}
+function drawSK(){
+  const it=SK.list[SK.i];SK.tries=0;
+  $("skBar").style.width=(SK.i/SK.list.length*100)+"%";
+  $("skPic").textContent=it.pic;$("skPic").style.display=it.pic?"flex":"none";
+  $("skText").textContent=it.en;$("skTr").textContent=it.tr;$("skHeard").textContent="";$("skMsg").textContent="";
+  setTimeout(()=>say(it.en),300);
+}
+const norm=s=>s.toLowerCase().replace(/[^a-z0-9 ]/g," ").replace(/\s+/g," ").trim();
+function listenMic(){
+  if(!SR){$("skHeard").textContent="Bu cihaz konuşma tanımayı desteklemiyor.";return}
+  stopSay();stopMic();
+  $("micBtn").classList.add("rec");$("skHeard").textContent="Dinliyorum... 👂";
+  if(IS_APP){
+    window.__sttResult=alts=>{$("micBtn").classList.remove("rec");heardAlts(alts)};
+    window.__sttError=c=>{$("micBtn").classList.remove("rec");$("skHeard").textContent=c===9?"Mikrofon izni verilmedi.":"Duyamadım, tekrar dene."};
+    try{AndroidApp.sttStart()}catch(e){$("micBtn").classList.remove("rec")}
+    return;
+  }
+  rec=new SR_WEB();rec.lang="en-US";rec.interimResults=false;rec.maxAlternatives=5;
+  rec.onresult=e=>heardAlts([...e.results[0]].map(a=>a.transcript));
+  rec.onerror=e=>{$("skHeard").textContent=e.error==="not-allowed"?"Mikrofon izni verilmedi.":"Duyamadım, tekrar dene.";};
+  rec.onend=()=>$("micBtn").classList.remove("rec");
+  try{rec.start()}catch(e){$("micBtn").classList.remove("rec")}
+}
+function heardAlts(alts){
+  if(!alts||!alts.length){$("skHeard").textContent="Duyamadım, tekrar dene.";return}
+  {
+    const target=norm(SK.list[SK.i].en).split(" ");
+    let best=0,heard=alts[0];
+    alts.forEach(a=>{const h=norm(a).split(" "),hit=target.filter(w=>h.includes(w)).length/target.length;if(hit>best){best=hit;heard=a}});
+    $("skHeard").textContent="Duyduğum: \""+heard+"\"";
+    if(best>=0.7){beep(true);confetti(6);$("skMsg").textContent=praise();if(!SK.tries)SK.score++;setTimeout(()=>skNext(true),1500)}
+    else{beep(false);SK.tries++;$("skMsg").textContent=SK.tries>=2?"Olsun! Bir sonrakine geçelim 💪":"Tekrar dene 💪";if(SK.tries>=2)setTimeout(()=>skNext(false),1800)}
+  }
+}
+function stopMic(){if(IS_APP){try{AndroidApp.sttStop()}catch(e){}}try{rec&&rec.abort()}catch(e){}rec=null;const m=$("micBtn");m&&m.classList.remove("rec")}
+function skNext(){stopMic();SK.i++;if(SK.i<SK.list.length)drawSK();else finish("speak",SK.score,SK.list.length)}
+
+/* ===================== OYUN BAŞLAT ===================== */
+function startMode(m){
+  const t=TH();lastGame=()=>startMode(m);
+  if(m==="quiz")runMCQ("Resim-Kelime",genQuiz(t),m);
+  else if(m==="tf")runMCQ("Doğru mu?",genTF(t),m);
+  else if(m==="listen")runMCQ("Dinle Seç",genListen(t),m);
+  else if(m==="blank")runMCQ("Boşluk Doldur",genBlank(t),m);
+  else if(m==="read")runMCQ("Okuma Soruları",genRead(t),m);
+  else if(m==="exam")runMCQ("Ünite Sınavı",genExam(t),m);
+  else if(m==="match")startMatch();
+  else if(m==="spell")startSpell();
+  else if(m==="build")startBuild();
+  else if(m==="speak")startSpeak();
+}
+
+/* ===================== SONUÇ ===================== */
+function finish(mode,sc,total,forced,txt){
+  const s=forced!=null?forced:(r=>r>=0.9?3:r>=0.65?2:r>0?1:0)(sc/total);
+  if(mode!=="rev"&&G!=null){const k=skey(G,T,mode);if(s>(ST.stars[k]||0)){ST.stars[k]=s;save()}}
+  $("rEmoji").textContent=s===3?"🏆":s===2?"🥈":s===1?"🙂":"💪";
+  $("rTitle").textContent=s===3?"Mükemmel!":s===2?"Çok iyi!":"Devam et!";
+  $("rTxt").textContent=txt||(total+" sorudan "+sc+" doğru");
+  $("rStars").textContent=starTxt(s);
+  $("result").classList.add("on");
+  if(s>0){confetti();say(s===3?"Excellent!":"Good job!")}
+  totalStars();
+}
+function closeResult(){$("result").classList.remove("on")}
+function replay(){stack.pop();lastGame&&lastGame()}
+
+/* ===================== SÖZLÜK ===================== */
+function openDict(){$("dq").value="";drawDict();show("dict","Sözlük")}
+function drawDict(){
+  const q=$("dq").value.trim().toLocaleLowerCase("tr");
+  const seen=new Set(),res=[];
+  for(const x of ALLW){const k=x.w[1]+"|"+x.w[2];if(seen.has(k))continue;
+    if(!q||x.w[1].toLowerCase().includes(q)||x.w[2].toLocaleLowerCase("tr").includes(q)){seen.add(k);res.push(x)}}
+  $("dList").innerHTML=`<div class="count" style="margin:0 0 8px">${res.length} kelime</div>`+res.slice(0,120).map(x=>`<div class="li" data-say="${esc(x.w[1])}"><div class="pe ${isTxt(x.w[0])?"txt":""}">${esc(x.w[0])}</div><div><b>${esc(x.w[1])}</b><span>${esc(x.w[2])} • ${x.g}, ${x.t}</span></div></div>`).join("");
+}
+
+/* ===================== HATALARIM ===================== */
+function refItem(r){const[g,t,k,i]=r.split("|"),th=GRADES[g]&&GRADES[g].themes[t];if(!th)return null;const it=k==="w"?th.words[i]:th.sents[i];return it?{th,k,it}:null}
+function openMistakes(){openMistakesDraw();show("mistakes","Hatalarım")}
+function openMistakesDraw(){
+  ST.mistakes=ST.mistakes.filter(r=>refItem(r));
+  $("mkCount").textContent=ST.mistakes.length+" tekrar bekliyor";
+  $("mkClear").textContent="🗑 Temizle";$("mkClear").dataset.c="";
+  $("mkList").innerHTML=ST.mistakes.slice().reverse().slice(0,60).map(r=>{const x=refItem(r);
+    return x.k==="w"?`<div class="li" data-say="${esc(x.it[1])}"><div class="pe ${isTxt(x.it[0])?"txt":""}">${esc(x.it[0])}</div><div><b>${esc(x.it[1])}</b><span>${esc(x.it[2])}</span></div></div>`
+      :`<div class="li" data-say="${esc(x.it[0])}"><div class="pe">💬</div><div><b style="font-size:16px">${esc(x.it[0])}</b><span>${esc(x.it[1])}</span></div></div>`}).join("");
+}
+function startReview(){
+  if(!ST.mistakes.length){$("mkCount").textContent="Hiç hatan yok! 🎉";return}
+  const qs=pick(ST.mistakes,10).map(r=>{const x=refItem(r);
+    return x.k==="w"?(x.th.words.length>=4?qWord(x.th,x.it,Math.floor(Math.random()*3)):null):(x.th.sents.length>=4?qListen(x.th,x.it):null)}).filter(Boolean);
+  if(!qs.length)return;
+  G=null;lastGame=startReview;runMCQ("Hatalarımı Çalış",qs,"rev");
+}
+function clearMistakes(){const b=$("mkClear");if(b.dataset.c){ST.mistakes=[];save();openMistakesDraw()}else{b.dataset.c="1";b.textContent="Emin misin? Tekrar dokun"}}
+
+/* ===================== AYARLAR ===================== */
+function openSettings(){drawSettings();ttsCheck();show("settings","Ayarlar")}
+function drawSettings(){
+  $("rateRow").innerHTML=[["🐢 Yavaş",0.6],["🙂 Normal",0.8],["🐇 Hızlı",1]].map(([n,v])=>`<button class="btn ${ST.rate===v?"sel":""}" onclick="ST.rate=${v};save();drawSettings();say('This is my speed.')">${n}</button>`).join("");
+  $("sfxRow").innerHTML=`<button class="btn g ${ST.sfx?"sel":""}" onclick="ST.sfx=true;save();drawSettings();beep(true)">Açık</button><button class="btn gr ${!ST.sfx?"sel":""}" onclick="ST.sfx=false;save();drawSettings()">Kapalı</button>`;
+  $("resetBtn").textContent="Tüm yıldızları sıfırla";$("resetBtn").dataset.c="";
+}
+function resetAll(){const b=$("resetBtn");if(b.dataset.c){ST.stars={};ST.mistakes=[];save();b.textContent="Sıfırlandı ✔";b.dataset.c=""}else{b.dataset.c="1";b.textContent="Emin misin? Tekrar dokun"}}
+
+/* ===================== ANDROID GERİ TUŞU ===================== */
+window.androidBack=()=>{
+  if($("result").classList.contains("on")){closeResult();goBack();return "ok"}
+  if(stack.length>1){goBack();return "ok"}
+  return "exit";
+};
+if(!IS_APP){
+  history.pushState(null,"",location.href);
+  window.addEventListener("popstate",()=>{
+    history.pushState(null,"",location.href);
+    if($("result").classList.contains("on"))closeResult();
+    if(stack.length>1)goBack();
+  });
+}
+renderHome();
+/* açılış ekranı */
+setTimeout(()=>{const s=$("splash");s.style.opacity="0";setTimeout(()=>s.remove(),550)},1600);
+/* ses motoru kontrolü */
+function ttsCheck(){
+  let msg="";
+  if(IS_APP){
+    let s="";try{s=AndroidApp.ttsStatus()}catch(e){}
+    if(s==="nolang")msg="Telefonda İngilizce ses paketi yüklü değil. Aşağıdaki butondan yükleyebilirsin.";
+    else if(s!=="ok")msg="Ses motoru hazırlanıyor ya da bulunamadı.";
+    $("ttsBtn").style.display="inline-block";
+  }
+  else if(!window.speechSynthesis)msg="Bu cihazda/uygulamada sesli okuma özelliği yok.";
+  else{const v=speechSynthesis.getVoices();if(v.length&&!v.some(x=>/^en/i.test(x.lang)))msg="Telefonda İngilizce ses paketi yüklü değil.";}
+  $("ttsInfo").textContent=msg?"⚠️ "+msg:"";
+  $("ttsWarn").style.display=msg?"block":"none";
+}
+setTimeout(ttsCheck,2500);
+
+</script>
+</body>
+</html>
